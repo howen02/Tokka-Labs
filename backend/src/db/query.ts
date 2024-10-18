@@ -17,4 +17,11 @@ export const insertTransactionsIntoDb = (transactions: Transaction[]) =>
 	transactions.forEach(insertTransactionIntoDb)
 
 export const queryRecentTransactions = () =>
-	db.query('SELECT * FROM transactions ORDER BY timeStamp DESC').all()
+	db
+		.query('SELECT * FROM transactions ORDER BY timeStamp DESC')
+		.all() as Transaction[]
+
+export const queryTransactionsInTimeRange = (start: string, end: string) =>
+	db
+		.query('SELECT * FROM transactions WHERE timeStamp BETWEEN ? AND ?')
+		.all(Number(start), Number(end)) as Transaction[]

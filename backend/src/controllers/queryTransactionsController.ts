@@ -1,13 +1,46 @@
-import db from '../db/db'
 import { Transaction } from '../types'
 import { buildRequestAndFetch } from '../utils'
 import { UNISWAP_POOL_ADDRESS } from '../constants'
-import { insertTransactionIntoDb, queryRecentTransactions } from '../db/query'
+import {
+	insertTransactionIntoDb,
+	queryRecentTransactions,
+	queryTransactionsInTimeRange
+} from '../db/query'
+
+export const queryTransactions = (
+	startTime: string | undefined,
+	endTime: string | undefined
+) =>
+	Promise.resolve(
+		startTime && endTime ?
+			findTransactionsInTimeRange(startTime, endTime)
+		:	queryRecentTransactions()
+	).then(txs =>
+		txs.length ?
+			{
+				status: 200,
+				body: { message: `${txs.length} transaction(s) found`, data: txs }
+			}
+		:	{ status: 404, body: { message: 'No transactions found' } }
+	)
 
 const findTransactionsInTimeRange = (start: string, end: string) =>
-	db
-		.query('SELECT * FROM transactions WHERE timeStamp BETWEEN ? AND ?')
-		.all(Number(start), Number(end)) as Transaction[]
+	Promise.resolve({ start, end })
+		.then(({ start, end }) => queryTransactionsInTimeRange(start, end))
+		.then(txs =>
+			txs.length ? txs : (
+				fetchTransactionsInTimeRange(start, end).then(txs =>
+					txs.length ? txs : Promise.reject('No transactions found')
+				)
+			)
+		)
+
+const fetchTransactionsInTimeRange = (start: string, end: string) =>
+	fetchBlockRange(start, end)
+		.then(({ startBlock, endBlock }) =>
+			fetchTransactionsBetweenBlocks(startBlock, endBlock)
+		)
+		.catch(err => Promise.reject('Error fetching transactions' + err))
 
 const fetchBlockWithTimestamp = (
 	timestamp: number,
@@ -23,15 +56,15 @@ const fetchBlockWithTimestamp = (
 	)
 		.then(buildRequestAndFetch<number>)
 		.then(res => res.result)
-		.catch(err => Promise.reject(err))
+		.catch(err => Promise.reject('Error fetching block with timestamp' + err))
 
-const fetchBlocksWithTimestamp = (start: string, end: string) =>
+const fetchBlockRange = (start: string, end: string) =>
 	Promise.all([
 		fetchBlockWithTimestamp(parseInt(start), 'after'),
 		fetchBlockWithTimestamp(parseInt(end), 'before')
 	])
 		.then(([startBlock, endBlock]) => ({ startBlock, endBlock }))
-		.catch(err => Promise.reject(err))
+		.catch(err => Promise.reject('Error fetching block range' + err))
 
 const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 	Promise.resolve(
@@ -52,16 +85,6 @@ const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 			transactions.forEach(insertTransactionIntoDb)
 			return transactions
 		})
-		.catch(err => Promise.reject(err))
-
-export const queryTransactions = (
-	startTime: string | undefined,
-	endTime: string | undefined
-) =>
-	startTime && endTime ?
-		(findTransactionsInTimeRange(startTime, endTime) ??
-		fetchBlocksWithTimestamp(startTime, endTime).then(
-			({ startBlock, endBlock }) =>
-				fetchTransactionsBetweenBlocks(startBlock, endBlock)
-		))
-	:	queryRecentTransactions()
+		.catch(err =>
+			Promise.reject('Error fetching transactions between blocks' + err)
+		)

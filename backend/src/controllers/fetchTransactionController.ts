@@ -8,7 +8,7 @@ export const fetchTransaction = (hash: string) =>
 			tx ?
 				{
 					status: 200,
-					body: { message: 'Transaction found', data: JSON.stringify(tx) }
+					body: { message: 'Transaction found', data: tx }
 				}
 			:	{ status: 404, body: { message: 'Transaction not found' } }
 		)
