@@ -1,0 +1,10 @@
+{
+	"dependencies": {},
+	"devDependencies": {
+		"prettier": "^3.3.3"
+	},
+	"scripts": {
+		"format": "bun prettier --write .",
+		"format:check": "bun prettier --check ."
+	}
+}

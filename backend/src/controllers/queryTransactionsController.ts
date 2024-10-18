@@ -53,7 +53,10 @@ const fetchTransctionsBetweenBlocks = (start: number, end: number) =>
 		})
 		.catch(err => Promise.reject(err))
 
-export const queryTransactions = (startTime: string | undefined, endTime: string | undefined) =>
+export const queryTransactions = (
+	startTime: string | undefined,
+	endTime: string | undefined
+) =>
 	startTime && endTime ?
 		(findTransactions(startTime, endTime) ??
 		fetchBlocksWithTimestamp(startTime, endTime).then(
