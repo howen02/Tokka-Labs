@@ -1,35 +1,23 @@
-import {ETHERSCAN_API_KEY, UNISWAP_ETH_USDC_CONTRACT_ADDRESS} from "../constants";
+import {ETHERSCAN_API_KEY, UNISWAP_POLL_ADDRESS} from "../constants";
 import db from "../db/db";
 import {Transaction} from "../types";
+import {buildRequestAndFetch, buildUrl} from "../utils";
 
-type TransactionResponse = {
-    status: string;
-    message: string;
-    result: Transaction[];
-}
-
-const fetchUniswapTransactions =
-    ({
-        page = 1,
-        offset = 100
-     } = {}) => {
-        const baseUrl = 'https://api.etherscan.io/api';
-        const params = new URLSearchParams({
+const fetchRecentTransactions =
+    () =>
+       Promise.resolve(
+            new URLSearchParams({
             module: 'account',
             action: 'tokentx',
-            address: UNISWAP_ETH_USDC_CONTRACT_ADDRESS,
-            page: page.toString(),
-            offset: offset.toString(),
+            address: UNISWAP_POLL_ADDRESS,
+            startblock:'0',
+            endblock: '99999999',
+            page: '1',
+            offset: '10000',
             sort: 'desc',
             apikey: ETHERSCAN_API_KEY || ''
-        });
-        const url = `${baseUrl}?${params.toString()}`;
-
-        return fetch(url)
-            .then(res => res.json() as unknown as TransactionResponse)
-            .then(transactionResponse => transactionResponse.result)
-            .catch(err => Promise.reject(err));
-    };
+        }))
+        .then(buildRequestAndFetch<Transaction[]>)
 
 const insertTransactionIntoDb = (transaction: Transaction) =>
     db
@@ -41,10 +29,10 @@ const insertTransactionsIntoDb = (transactions: Transaction[]) =>
 
 export const pollTransactions = () => {
     const poll = () =>
-        fetchUniswapTransactions()
-            .then(insertTransactionsIntoDb)
-            .then(() => console.log("Fetched recent transactions at", new Date()))
-            .catch(err => console.error("Error fetching transactions:", err));
+        fetchRecentTransactions()
+        .then(insertTransactionsIntoDb)
+        .then(() => console.log("Fetched transactions at", new Date()))
+        .catch(err => console.error("Error fetching transactions:", err));
 
     poll().then();
     setInterval(poll, 1000);
