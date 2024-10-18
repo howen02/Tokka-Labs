@@ -75,7 +75,7 @@ const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 			startblock: start.toString(),
 			endblock: end.toString(),
 			page: '1',
-			offset: '10000',
+			offset: '10_000',
 			sort: 'asc'
 		})
 	)

@@ -12,7 +12,7 @@ export const fetchRecentTransactions = () =>
 			startblock: '0',
 			endblock: '99999999',
 			page: '1',
-			offset: '10000',
+			offset: '50',
 			sort: 'desc'
 		})
 	).then(buildRequestAndFetch<Transaction[]>)
@@ -26,5 +26,5 @@ export const pollTransactions = () => {
 			.catch(err => console.error('Error fetching transactions:', err))
 
 	poll().then()
-	setInterval(poll, 1000)
+	setInterval(poll, 5_000)
 }
