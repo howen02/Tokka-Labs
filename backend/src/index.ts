@@ -4,7 +4,7 @@ import { fetchTransaction } from './controllers/fetchTransactionController'
 import { queryTransactions } from './controllers/queryTransactionsController'
 
 const app = new Elysia()
-	.get('/transactions/:start&:end', ({ query: { start, end } }) =>
+	.get('/transactions/', ({ query: { start, end } }) =>
 		queryTransactions(start, end)
 	)
 	.get('/transaction/:hash', ({ params: { hash } }) => fetchTransaction(hash))

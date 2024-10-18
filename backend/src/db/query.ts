@@ -15,3 +15,6 @@ export const insertTransactionIntoDb = (transaction: Transaction) =>
 
 export const insertTransactionsIntoDb = (transactions: Transaction[]) =>
 	transactions.forEach(insertTransactionIntoDb)
+
+export const queryRecentTransactions = () =>
+	db.query('SELECT * FROM transactions ORDER BY timeStamp DESC').all()

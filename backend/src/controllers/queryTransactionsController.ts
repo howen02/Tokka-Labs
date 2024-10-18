@@ -2,12 +2,12 @@ import db from '../db/db'
 import { Transaction } from '../types'
 import { buildRequestAndFetch } from '../utils'
 import { UNISWAP_POOL_ADDRESS } from '../constants'
-import { insertTransactionIntoDb } from '../db/query'
+import { insertTransactionIntoDb, queryRecentTransactions } from '../db/query'
 
-const findTransactions = (start: string, end: string) =>
+const findTransactionsInTimeRange = (start: string, end: string) =>
 	db
 		.query('SELECT * FROM transactions WHERE timeStamp BETWEEN ? AND ?')
-		.all(start, end) as Transaction[]
+		.all(Number(start), Number(end)) as Transaction[]
 
 const fetchBlockWithTimestamp = (
 	timestamp: number,
@@ -33,7 +33,7 @@ const fetchBlocksWithTimestamp = (start: string, end: string) =>
 		.then(([startBlock, endBlock]) => ({ startBlock, endBlock }))
 		.catch(err => Promise.reject(err))
 
-const fetchTransctionsBetweenBlocks = (start: number, end: number) =>
+const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 	Promise.resolve(
 		new URLSearchParams({
 			module: 'account',
@@ -50,6 +50,7 @@ const fetchTransctionsBetweenBlocks = (start: number, end: number) =>
 		.then(res => res.result)
 		.then(transactions => {
 			transactions.forEach(insertTransactionIntoDb)
+			return transactions
 		})
 		.catch(err => Promise.reject(err))
 
@@ -58,9 +59,9 @@ export const queryTransactions = (
 	endTime: string | undefined
 ) =>
 	startTime && endTime ?
-		(findTransactions(startTime, endTime) ??
+		(findTransactionsInTimeRange(startTime, endTime) ??
 		fetchBlocksWithTimestamp(startTime, endTime).then(
 			({ startBlock, endBlock }) =>
-				fetchTransctionsBetweenBlocks(startBlock, endBlock)
+				fetchTransactionsBetweenBlocks(startBlock, endBlock)
 		))
-	:	Promise.reject('Invalid time range')
+	:	queryRecentTransactions()

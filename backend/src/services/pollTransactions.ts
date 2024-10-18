@@ -3,7 +3,7 @@ import { Transaction } from '../types'
 import { buildRequestAndFetch } from '../utils'
 import { insertTransactionsIntoDb } from '../db/query'
 
-const fetchRecentTransactions = () =>
+export const fetchRecentTransactions = () =>
 	Promise.resolve(
 		new URLSearchParams({
 			module: 'account',
