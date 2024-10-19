@@ -1,7 +1,7 @@
 import db from '../db/db'
 import { Transaction, TransactionReceipt } from '../types'
 import { buildRequestAndFetch } from '../utils'
-import {insertTransactionIntoDb} from "../db/query";
+import { insertTransactionIntoDb } from '../db/query'
 
 export const getTransaction = (hash: string) =>
 	Promise.resolve(hash)
@@ -21,7 +21,7 @@ const fetchTransaction = (hash: string) =>
 	fetchTransactionReceipt(hash)
 		.then(res => appendTimeStamp(res.result))
 		.then(tx => {
-			insertTransactionIntoDb(tx);
+			insertTransactionIntoDb(tx)
 			return tx
 		})
 		.catch(err => Promise.reject('Error fetching transaction' + err))
