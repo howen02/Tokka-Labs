@@ -12,3 +12,9 @@ export type TransactionReceipt = {
 	effectiveGasPrice: number
 	hash: string
 }
+
+export type GenericResponse<T> = {
+	status: string
+	message: string
+	result: T
+}

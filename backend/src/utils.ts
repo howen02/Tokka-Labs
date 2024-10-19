@@ -1,15 +1,10 @@
 import { ETHERSCAN_API_KEY, ETHERSCAN_URL } from './constants'
+import { GenericResponse } from './types'
 
 export const buildUrl = (params: URLSearchParams) => {
 	if (ETHERSCAN_API_KEY) params.append('apikey', ETHERSCAN_API_KEY)
 
 	return `${ETHERSCAN_URL}?${params.toString()}`
-}
-
-type GenericResponse<T> = {
-	status: string
-	message: string
-	result: T
 }
 
 export const buildRequestAndFetch = <T>(
