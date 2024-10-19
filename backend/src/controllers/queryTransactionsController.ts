@@ -15,14 +15,12 @@ export const queryTransactions = (
 		startTime && endTime ?
 			findTransactionsInTimeRange(startTime, endTime)
 		:	queryRecentTransactions()
-	).then(txs =>
-		txs.length ?
-			{
-				status: 200,
-				body: { message: `${txs.length} transaction(s) found`, data: txs }
-			}
-		:	{ status: 404, body: { message: 'No transactions found' } }
 	)
+		.then(txs => ({
+			status: 200,
+			body: { message: `${txs.length} transaction(s) found`, data: txs }
+		}))
+		.catch(err => ({ status: 404, body: { message: err } }))
 
 const findTransactionsInTimeRange = (start: string, end: string) =>
 	Promise.resolve({ start, end })
