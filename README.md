@@ -22,6 +22,8 @@ This project is a full-stack application that monitors and displays transaction 
 ## Note
 Due to Binance API's rate limit, some transactions may not be available. This is because I chose to fetch the historical ETH price when the transaction occurs to reflect more accurate gas prices.
 
+When batch-fetching past transactions, the Binance API is used to get the ETH-USD spot price for each timestamp. This exceeds the API's rate limit and will result in an IP ban. 
+
 ## Tech Stack
 ### Frontend:
 - React
