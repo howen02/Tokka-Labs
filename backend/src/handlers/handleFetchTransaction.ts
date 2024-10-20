@@ -52,6 +52,7 @@ const appendTimeStamp = (receipt: TransactionReceipt) =>
 				({
 					...receipt,
 					gasPrice: receipt.effectiveGasPrice,
+					ethPrice: 0,
 					timeStamp: parseInt(res.result.timeStamp)
 				}) as Transaction
 		)

@@ -3,6 +3,7 @@ export type Transaction = {
 	gasUsed: number
 	gasPrice: number
 	timeStamp: number
+	ethPrice: number
 	hash: string
 }
 

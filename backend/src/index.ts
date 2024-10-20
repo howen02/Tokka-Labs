@@ -5,14 +5,14 @@ import {
 	getTransactionsInTimeRange
 } from './handlers/handleFetchTransactions'
 import { getTransaction } from './handlers/handleFetchTransaction'
-import { pollTransactionsCron} from "./middleware";
+import { pollTransactionsCron } from './middleware'
 
 const app = new Elysia()
 	.use(cors())
 	.use(pollTransactionsCron)
-	.onRequest((context) => {
-		const { method, url } = context.request;
-		console.log(`Request: ${method} ${url}`);
+	.onRequest(context => {
+		const { method, url } = context.request
+		console.log(`Request: ${method} ${url}`)
 	})
 	.group('/transactions', app =>
 		app

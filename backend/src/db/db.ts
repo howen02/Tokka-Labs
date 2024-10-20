@@ -8,6 +8,7 @@ db.query(
         blockNumber INTEGER NOT NULL,
         gasUsed INTEGER NOT NULL,
         gasPrice INTEGER NOT NULL,
+        ethPrice REAL NOT NULL,
         timeStamp INTEGER NOT NULL
     )`
 ).run()

@@ -1,6 +1,6 @@
 import { UNISWAP_POOL_ADDRESS } from '../constants'
 import { Transaction } from '../types'
-import { buildRequestAndFetch } from '../utils'
+import { buildRequestAndFetch, fetchLiveEthPrice } from '../utils'
 import { insertTransactionsIntoDb } from '../db/query'
 
 export const fetchRecentTransactions = () =>
@@ -18,8 +18,11 @@ export const fetchRecentTransactions = () =>
 	).then(buildRequestAndFetch<Transaction[]>)
 
 export const pollTransactions = () =>
-	fetchRecentTransactions()
-		.then(res => res.result)
-		.then(insertTransactionsIntoDb)
-		.then(() => 'Transactions fetched and inserted into database')
+	Promise.all([fetchRecentTransactions(), fetchLiveEthPrice()])
+		.then(([res, ethPrice]) =>
+			insertTransactionsIntoDb(
+				res.result.map(tx => ({ ...tx, ethPrice })) as Transaction[]
+			)
+		)
+		.then(() => console.log(`[${(new Date()).toLocaleString()}] Successfully polled transactions`))
 		.catch(err => console.error('Error fetching transactions:', err))

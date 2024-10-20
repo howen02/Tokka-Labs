@@ -4,13 +4,14 @@ import db from './db'
 export const insertTransactionIntoDb = (transaction: Transaction) =>
 	db
 		.query(
-			'INSERT OR IGNORE INTO transactions (hash, blockNumber, gasUsed, gasPrice, timeStamp) VALUES (?, ?, ?, ?, ?)'
+			'INSERT OR IGNORE INTO transactions (hash, blockNumber, gasUsed, gasPrice, ethPrice, timeStamp) VALUES (?, ?, ?, ?, ?, ?)'
 		)
 		.run(
 			transaction.hash,
 			transaction.blockNumber,
 			transaction.gasUsed,
 			transaction.gasPrice,
+			transaction.ethPrice,
 			transaction.timeStamp
 		)
 
