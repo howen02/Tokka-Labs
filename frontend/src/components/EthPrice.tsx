@@ -11,13 +11,13 @@ const fetchEthPrice = () =>
 	fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT')
 		.then(res => res.json())
 		.then(data => data.price)
-		.catch(err => console.error('Error fetching the price:', err))
+		.catch(_ => 0)
 
 function EthPriceCard() {
 	const { data: price } = useQuery({
 		queryKey: ['ethPrice'],
 		queryFn: fetchEthPrice,
-		refetchInterval: 5000
+		refetchInterval: 60 * 1000,
 	})
 
 	return (
