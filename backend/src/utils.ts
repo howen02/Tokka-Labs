@@ -27,14 +27,10 @@ export const fetchLiveEthPrice = () =>
 		.then(res => parseFloat(res.price))
 		.catch(err => Promise.reject('Error fetching live ETH price: ' + err))
 
-export const fetchHistoricalEthPrice = (timestamp: number) => {
-	const endTime = timestamp * 1000
-	const startTime = endTime - 60000
-
-	return fetch(
-		`${BINANCE_HISTORICAL_ETH_PRICE_URL}?symbol=ETHUSDT&interval=1m&startTime=${startTime}&endTime=${endTime}&limit=1`
+export const fetchHistoricalEthPrice = (timeStamp: number) =>
+	fetch(
+		`${BINANCE_HISTORICAL_ETH_PRICE_URL}?symbol=ETHUSDT&interval=1m&startTime=${timeStamp}&limit=1`
 	)
-		.then(response => response.json())
+		.then(res => res.json())
 		.then(data => parseFloat(data[0][4]))
 		.catch(err => Promise.reject('Error fetching historical ETH price: ' + err))
-}

@@ -29,6 +29,7 @@ export function TransactionsTable({
 	hasNextPage
 }: TransactionsTableProps) {
 	transactions = Array.isArray(transactions) ? transactions : [transactions]
+	console.log(transactions)
 
 	const handlePageSizeChange = (newPageSize: number) => {
 		onPageSizeChange(newPageSize)

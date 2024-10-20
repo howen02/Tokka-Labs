@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import { DateRangePicker } from '@/components/DateRangePicker.tsx'
 import { DateRange } from 'react-day-picker'
+import {X} from "lucide-react";
 
 function TransactionsPage() {
 	const [page, setPage] = useState(1)
@@ -59,7 +60,7 @@ function TransactionsPage() {
 			}
 		],
 		queryFn: fetchTransactions,
-		staleTime: 5000,
+		staleTime: 10 * 60 * 1000,
 		refetchInterval: 1000
 	})
 
@@ -69,10 +70,6 @@ function TransactionsPage() {
 
 	const handlePageSizeChange = (newPageSize: number) => {
 		setPageSize(newPageSize)
-		setPage(1)
-	}
-
-	const handleSearch = () => {
 		setPage(1)
 	}
 
@@ -92,8 +89,8 @@ function TransactionsPage() {
 						value={transactionHash}
 						onChange={e => setTransactionHash(e.target.value)}
 					/>
+					<Button className="w-2" variant="destructive" onClick={() => setTransactionHash('')}><X/></Button>
 					<DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
-					<Button onClick={handleSearch}>Search</Button>
 				</div>
 				<TransactionsTable
 					transactions={transactions || []}

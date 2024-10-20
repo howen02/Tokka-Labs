@@ -16,7 +16,7 @@ export const insertTransactionIntoDb = (transaction: Transaction) =>
 		)
 
 export const insertTransactionsIntoDb = (transactions: Transaction[]) =>
-	transactions.forEach(insertTransactionIntoDb)
+  Promise.all(transactions.map(insertTransactionIntoDb));
 
 export const queryRecentTransactions = (page: number, pageSize: number) =>
 	db
@@ -41,3 +41,8 @@ export const queryTransactionsInTimeRange = (
 			pageSize,
 			(page - 1) * pageSize
 		) as Transaction[]
+
+export const queryTransaction = (hash: string): Transaction =>
+	db
+		.query('SELECT * FROM transactions WHERE hash = $hash')
+		.get({ $hash: hash }) as Transaction

@@ -1,7 +1,6 @@
-import db from '../db/db'
 import { Transaction, TransactionReceipt } from '../types'
-import { buildRequestAndFetch } from '../utils'
-import { insertTransactionIntoDb } from '../db/query'
+import {buildRequestAndFetch, fetchHistoricalEthPrice} from '../utils'
+import {insertTransactionIntoDb, queryTransaction} from '../db/query'
 
 export const getTransaction = (hash: string) =>
 	Promise.resolve(hash)
@@ -12,14 +11,12 @@ export const getTransaction = (hash: string) =>
 		}))
 		.catch(err => ({ status: 404, body: { message: err } }))
 
-const queryTransaction = (hash: string): Transaction =>
-	db
-		.query('SELECT * FROM transactions WHERE hash = $hash')
-		.get({ $hash: hash }) as Transaction
+
 
 const fetchTransaction = (hash: string) =>
 	fetchTransactionReceipt(hash)
-		.then(res => appendTimeStamp(res.result))
+		.then(appendTimeStamp)
+		.then(appendEthPrice)
 		.then(tx => {
 			insertTransactionIntoDb(tx)
 			return tx
@@ -35,7 +32,7 @@ const fetchTransactionReceipt = (hash: string) =>
 		})
 	)
 		.then(buildRequestAndFetch<TransactionReceipt>)
-		.then(res => res)
+		.then(res => res.result)
 		.catch(err => Promise.reject('Error fetching transaction receipt' + err))
 
 const appendTimeStamp = (receipt: TransactionReceipt) =>
@@ -57,3 +54,9 @@ const appendTimeStamp = (receipt: TransactionReceipt) =>
 				}) as Transaction
 		)
 		.catch(err => Promise.reject('Error fetching block reward' + err))
+
+export const appendEthPrice = (tx: Transaction) =>
+	Promise.resolve(tx.timeStamp)
+		.then(fetchHistoricalEthPrice)
+		.then(price => ({ ...tx, ethPrice: price }))
+		.catch(err => Promise.reject('Error appending ETH price' + err))

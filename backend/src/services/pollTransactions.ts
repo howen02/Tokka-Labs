@@ -24,5 +24,9 @@ export const pollTransactions = () =>
 				res.result.map(tx => ({ ...tx, ethPrice })) as Transaction[]
 			)
 		)
-		.then(() => console.log(`[${(new Date()).toLocaleString()}] Successfully polled transactions`))
+		.then(() =>
+			console.log(
+				`[${new Date().toLocaleString()}] Successfully polled transactions`
+			)
+		)
 		.catch(err => console.error('Error fetching transactions:', err))
