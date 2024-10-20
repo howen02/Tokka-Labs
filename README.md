@@ -44,9 +44,7 @@ Due to Binance API's rate limit, some transactions may not be available. This is
 
 - SQLite3:
     - Lightweight, serverless database that doesn't require a separate server process
-    - Excellent for applications with moderate concurrent write volume
-    - Zero-configuration required, reducing operational complexity
-    - Direct file-based storage makes backups and data management straightforward
+    - It came with Bun
 ### DevOps:
 - Docker
 - Docker Compose
