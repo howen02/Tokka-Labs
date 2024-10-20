@@ -24,7 +24,19 @@ export const queryRecentTransactions = (page: number, pageSize: number) =>
 		)
 		.all(pageSize, (page - 1) * pageSize) as Transaction[]
 
-export const queryTransactionsInTimeRange = (start: string, end: string) =>
+export const queryTransactionsInTimeRange = (
+	start: string,
+	end: string,
+	page: number,
+	pageSize: number
+) =>
 	db
-		.query('SELECT * FROM transactions WHERE timeStamp BETWEEN ? AND ?')
-		.all(Number(start), Number(end)) as Transaction[]
+		.query(
+			'SELECT * FROM transactions WHERE timeStamp BETWEEN ? AND ? ORDER BY timeStamp DESC LIMIT ? OFFSET ?'
+		)
+		.all(
+			Number(start),
+			Number(end),
+			pageSize,
+			(page - 1) * pageSize
+		) as Transaction[]

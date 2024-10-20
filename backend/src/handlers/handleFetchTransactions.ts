@@ -37,11 +37,15 @@ const findTransactionsInTimeRange = (
 	pageSize: number
 ) =>
 	Promise.resolve({ start, end })
-		.then(({ start, end }) => queryTransactionsInTimeRange(start, end))
+		.then(({ start, end }) =>
+			queryTransactionsInTimeRange(start, end, page, pageSize)
+		)
 		.then(txs =>
 			txs.length ? txs : (
 				fetchTransactionsInTimeRange(start, end).then(txs =>
-					txs.length ? txs : Promise.reject('No transactions found')
+					txs.length ?
+						txs.slice((page - 1) * pageSize, page * pageSize)
+					:	Promise.reject('No transactions found')
 				)
 			)
 		)

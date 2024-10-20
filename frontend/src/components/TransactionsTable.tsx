@@ -13,7 +13,7 @@ import { SelectPageSize } from './SelectPageSize.tsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 type TransactionsTableProps = {
-	transactions: Transaction[]
+	transactions: Transaction[] | Transaction
 	page: number
 	pageSize: number
 	onPageChange: (page: number) => void
@@ -28,6 +28,7 @@ export function TransactionsTable({
 	onPageSizeChange,
 	hasNextPage
 }: TransactionsTableProps) {
+	transactions = Array.isArray(transactions) ? transactions : [transactions]
 	const totalGasUsed = transactions.reduce(
 		(total, transaction) => total + transaction.gasUsed,
 		0
