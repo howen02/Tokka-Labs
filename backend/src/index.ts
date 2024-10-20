@@ -10,7 +10,7 @@ import { pollTransactionsCron } from './middleware'
 const app = new Elysia()
 	.use(cors())
 	.use(pollTransactionsCron)
-	.onRequest(({ request: { method, url } }) => console.log(`Request: ${method} ${url}`))
+	.onRequest(({ request: { method, url } }) => console.log(`[${new Date().toLocaleString()}] Request: ${method} ${url}`))
 	.group('/transactions', app =>
 		app
 			.get('/', ({ query: { page = 1, pageSize = 50 } }) =>
