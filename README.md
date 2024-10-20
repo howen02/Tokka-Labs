@@ -6,6 +6,9 @@ Transaction fee monitor for Uniswap's WETH-USDC pool
 2. [Tech Stack](#tech-stack)
 3. [Architecture](#architecture)
 4. [Getting Started](#getting-started)
+    - [Environment Setup](#environment-setup)
+    - [Manual Setup](#manual-setup)
+    - [Setup Using Scripts](#setup-using-scripts)
 5. [Running Tests](#running-tests)
 6. [Docker Instructions](#docker-instructions)
 
@@ -40,6 +43,16 @@ The architecture consists of:
 
 ## Getting Started
 
+### Environment Setup
+
+Before proceeding with either the manual setup or setup using scripts, you need to set up your environment variables:
+
+1. Navigate to the `backend` directory.
+2. Copy the `.env.example` file to a new file named `.env`.
+3. Open the `.env` file and fill in the necessary values for your environment.
+
+### Manual Setup
+
 1. Clone the repository:
    ```
    git clone https://github.com/howen02/Tokka-Labs/
@@ -48,30 +61,44 @@ The architecture consists of:
 
 2. Install dependencies:
    ```
-   # Install frontend dependencies
    cd frontend
-   npm install
+   npm install --legacy-peer-deps
 
-   # Install backend dependencies
    cd ../backend
    bun install
    ```
 
-3. Set up environment variables:
-   Create `.env` file `backend` directory based on the provided `.env.example` files.
-
-4. Start the development servers:
+3. Start the development servers:
    ```
-   # Start backend
    cd backend
    bun run dev
 
-   # Start frontend (in a new terminal)
    cd frontend
    npm run dev
    ```
 
-5. Open your browser and navigate to `http://localhost:5173` to view the application.
+4. Open your browser and navigate to `http://localhost:5173` to view the application.
+
+### Setup Using Scripts
+
+We provide two setup scripts for your convenience: one for local setup and one for Docker setup.
+
+1. First, make the scripts executable:
+   ```
+   chmod +x local.sh docker.sh
+   ```
+
+2. For local setup, run:
+   ```
+   ./local.sh
+   ```
+
+3. For Docker setup, run:
+   ```
+   ./docker.sh
+   ```
+
+Remember to set up your environment variables as described in the [Environment Setup](#environment-setup) section before running these scripts.
 
 ## Running Tests
 

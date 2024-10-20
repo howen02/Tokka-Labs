@@ -4,7 +4,7 @@ echo "Setting up Tokka-Labs locally..."
 # Install frontend dependencies
 echo "Installing frontend dependencies..."
 cd frontend
-npm install
+npm install --legacy-peer-deps
 
 # Install backend dependencies
 echo "Installing backend dependencies..."
