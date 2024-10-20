@@ -62,6 +62,9 @@ The architecture consists of:
 - Nginx as a reverse proxy to distribute requests among backend instances via Round Robin.
 - SQLite3 databases for each instance for data persistence.
 
+### Frontend Design
+![img_1.png](img_1.png)
+
 ## Availability, Scalability, and Reliability
 
 This project has been designed with availability, scalability, and reliability in mind:
