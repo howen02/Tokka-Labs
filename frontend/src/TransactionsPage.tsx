@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button.tsx'
 import { DateRangePicker } from '@/components/DateRangePicker.tsx'
 import { DateRange } from 'react-day-picker'
 import {X} from "lucide-react";
+import EthPriceCard from "@/components/EthPrice.tsx";
 
 function TransactionsPage() {
 	const [page, setPage] = useState(1)
@@ -76,6 +77,11 @@ function TransactionsPage() {
 	const handleDateRangeChange = (newDateRange: DateRange | undefined) =>
 		setDateRange(newDateRange)
 
+	const resetFilters = () => {
+		setTransactionHash("");
+		setDateRange(undefined);
+	}
+
 	const hasNextPage =
 		(transactions && transactions.length === pageSize) ?? false
 
@@ -85,12 +91,13 @@ function TransactionsPage() {
 				<div className="flex gap-2">
 					<Input
 						type="text"
-						placeholder="Transaction hash"
+						placeholder="Search hash"
 						value={transactionHash}
 						onChange={e => setTransactionHash(e.target.value)}
 					/>
-					<Button className="w-2" variant="destructive" onClick={() => setTransactionHash('')}><X/></Button>
-					<DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
+					<DateRangePicker value={dateRange} onChange={handleDateRangeChange}/>
+					<Button className="w-2" variant="destructive" onClick={() => resetFilters()}><X/></Button>
+					<EthPriceCard/>
 				</div>
 				<TransactionsTable
 					transactions={transactions || []}
