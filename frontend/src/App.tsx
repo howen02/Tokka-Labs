@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import TransactionsPage from '@/TransactionsPage.tsx'
+import TransactionsPage from '@/pages/TransactionsPage.tsx'
 
 const queryClient = new QueryClient()
 
