@@ -7,14 +7,14 @@ RUN npm install --legacy-peer-deps
 COPY frontend/ .
 RUN npm run build
 
-# Base image for the backend using Bun
+# Base image for the backend
 FROM oven/bun:1 as backend-build
 WORKDIR /app/backend
 COPY backend/package.json backend/bun.lockb ./
 RUN bun install
 COPY backend/ .
 
-# Final stage combining both frontend and backend
+# Combine frontend and backend
 FROM oven/bun:1 as final
 WORKDIR /app
 
@@ -29,7 +29,7 @@ RUN rm -rf /app/frontend/node_modules /app/frontend/.vite /app/backend/node_modu
 ENV NODE_ENV=production
 
 # Expose ports for frontend and backend
-EXPOSE 5173 3000
+EXPOSE 4173 3000
 
 # Start both frontend and backend with logs
 CMD ["sh", "-c", "echo 'Starting frontend...' && cd /app/frontend && npm run start & echo 'Frontend running on port 5173' && echo 'Starting backend...' && cd /app/backend && bun run start && echo 'Backend running on port 3000'"]
