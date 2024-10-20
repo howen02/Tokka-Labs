@@ -8,7 +8,6 @@ services:
       - '4173:4173'
     environment:
       - NODE_ENV=production
-      - NGINX_PROXY=http://localhost:8080 # Point to Nginx reverse proxy
     command:
       [
         'sh',

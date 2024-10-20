@@ -13,5 +13,5 @@ fi
 echo "Building and starting Docker containers..."
 docker-compose up --build -d
 
-echo "Setup complete! The application will be available at http://localhost:5173"
+echo "Setup complete! The application will be available at http://localhost:4173"
 echo "To stop the containers, run: docker-compose down"
