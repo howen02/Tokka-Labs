@@ -14,7 +14,6 @@ const app = new Elysia()
 		cors({
 			origin: [
 				'http://localhost:4173',
-				'http://frontend:4173',
 				'http://localhost:8080',
 				'http://localhost:5173'
 			]
