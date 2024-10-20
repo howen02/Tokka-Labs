@@ -10,8 +10,7 @@
 		"@elysiajs/cors": "^1.1.1",
 		"@elysiajs/cron": "^1.1.1",
 		"dotenv": "^16.4.5",
-		"elysia": "latest",
-		"redis": "^4.7.0"
+		"elysia": "latest"
 	},
 	"devDependencies": {
 		"bun-types": "latest",
