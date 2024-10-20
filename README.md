@@ -63,7 +63,7 @@ The architecture consists of:
 - SQLite3 databases for each instance for data persistence.
 
 ### Frontend Design
-![img_1.png](img_1.png)
+![img_2.png](img_2.png)
 
 ## Availability, Scalability, and Reliability
 
