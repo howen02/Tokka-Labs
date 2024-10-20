@@ -29,10 +29,6 @@ export function TransactionsTable({
 	hasNextPage
 }: TransactionsTableProps) {
 	transactions = Array.isArray(transactions) ? transactions : [transactions]
-	const totalGasUsed = transactions.reduce(
-		(total, transaction) => total + transaction.gasUsed,
-		0
-	)
 
 	const handlePageSizeChange = (newPageSize: number) => {
 		onPageSizeChange(newPageSize)
@@ -72,8 +68,8 @@ export function TransactionsTable({
 			</ScrollArea>
 			<div className="flex py-1 px-2 justify-between items-center">
 				<div className="flex gap-1">
-					<p className="font-semibold">Total Gas Used:</p>
-					<p>{totalGasUsed} Gwei</p>
+					<p className="font-semibold">Total:</p>
+					<p>USDT | ETH</p>
 				</div>
 				<div className="flex gap-2 justify-center items-center">
 					<SelectPageSize onPageSizeChange={handlePageSizeChange} />

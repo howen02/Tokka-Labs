@@ -43,7 +43,7 @@ function TransactionsPage() {
 			.then((data: Response<Transaction[]>) => data.body.data)
 	}
 
-	const { data: transactions, refetch } = useQuery({
+	const { data: transactions } = useQuery({
 		queryKey: [
 			'transactions',
 			{
@@ -59,7 +59,8 @@ function TransactionsPage() {
 			}
 		],
 		queryFn: fetchTransactions,
-		staleTime: 5000
+		staleTime: 5000,
+		refetchInterval: 1000
 	})
 
 	const handlePageChange = (newPage: number) => {
@@ -73,7 +74,6 @@ function TransactionsPage() {
 
 	const handleSearch = () => {
 		setPage(1)
-		refetch()
 	}
 
 	const handleDateRangeChange = (newDateRange: DateRange | undefined) =>
