@@ -1,4 +1,4 @@
-# Base image for both frontend and backend
+# Base image for frontend build
 FROM node:18-alpine as frontend-build
 WORKDIR /app/frontend
 COPY frontend/package.json frontend/package-lock.json ./
@@ -21,6 +21,9 @@ WORKDIR /app
 # Copy frontend build output and backend source
 COPY --from=frontend-build /app/frontend/dist /app/frontend/dist
 COPY --from=backend-build /app/backend /app/backend
+
+# Install Redis client for the backend
+RUN cd /app/backend && bun add redis
 
 # Clean up potential cache
 RUN rm -rf /app/frontend/node_modules /app/frontend/.vite /app/backend/node_modules

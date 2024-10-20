@@ -20,13 +20,23 @@ services:
       context: .
       dockerfile: Dockerfile
       target: backend-build
-    ports:
-      - '3000:3000'
+    #    ports:
+    #      - '3000:3000'
     environment:
       - NODE_ENV=production
+      - REDIS_HOST=redis
     command:
       [
         'sh',
         '-c',
         "cd /app/backend && echo 'Starting backend...' && bun run start"
       ]
+    depends_on:
+      - redis
+    deploy:
+      replicas: 3
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
