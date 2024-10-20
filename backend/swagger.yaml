@@ -1,0 +1,178 @@
+openapi: 3.0.0
+info:
+  title: Transaction API
+  version: 1.0.0
+  description: API for retrieving Ethereum transaction data and fees.
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+paths:
+  /transactions:
+    get:
+      summary: Get recent transactions
+      description: Retrieves recent transactions with pagination.
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+            example: 1
+          description: The page number to retrieve.
+        - in: query
+          name: pageSize
+          required: false
+          schema:
+            type: integer
+            default: 50
+            example: 50
+          description: The number of transactions per page.
+      responses:
+        '200':
+          description: A list of recent transactions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "10 transaction(s) found"
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+        '404':
+          description: No transactions found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No transactions found"
+
+  /transactions/range:
+    get:
+      summary: Get transactions in a time range
+      description: Retrieves transactions within a specified time range with pagination.
+      parameters:
+        - in: query
+          name: start
+          required: false
+          schema:
+            type: string
+            default: "0"
+            example: "0"
+          description: Start timestamp (milliseconds).
+        - in: query
+          name: end
+          required: false
+          schema:
+            type: string
+            default: "current timestamp"
+            example: "1700000000000"
+          description: End timestamp (milliseconds).
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+            example: 1
+          description: The page number to retrieve.
+        - in: query
+          name: pageSize
+          required: false
+          schema:
+            type: integer
+            default: 50
+            example: 50
+          description: The number of transactions per page.
+      responses:
+        '200':
+          description: A list of transactions in the given time range.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "5 transaction(s) found"
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+        '404':
+          description: No transactions found in the specified time range.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No transactions found"
+
+  /transaction/{hash}:
+    get:
+      summary: Get transaction details by hash
+      description: Retrieves details for a transaction based on its hash.
+      parameters:
+        - in: path
+          name: hash
+          required: true
+          schema:
+            type: string
+          description: The transaction hash to retrieve details for.
+      responses:
+        '200':
+          description: Transaction details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Transaction found"
+                  data:
+                    $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Transaction not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Transaction not found"
+
+components:
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        hash:
+          type: string
+          example: "0x123abc..."
+        blockNumber:
+          type: integer
+          example: 1234567
+        gasUsed:
+          type: number
+          example: 21000
+        gasPrice:
+          type: number
+          example: 20000000000
+        timeStamp:
+          type: integer
+          example: 1638300000
+        ethPrice:
+          type: number
+          example: 3000.5
