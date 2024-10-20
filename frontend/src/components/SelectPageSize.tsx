@@ -9,14 +9,21 @@ import {
 import { TooltipProvider } from '@radix-ui/react-tooltip'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip.tsx'
 
-export function SelectPageSize() {
+type SelectPageSizeProps = {
+	onPageSizeChange: (pageSize: number) => void
+}
+
+export function SelectPageSize({ onPageSizeChange }: SelectPageSizeProps) {
 	return (
 		<TooltipProvider>
 			<Tooltip>
 				<TooltipTrigger asChild>
 					<div>
-						<Select defaultValue="50">
-							<SelectTrigger className="w-[70px]">
+						<Select
+							defaultValue="50"
+							onValueChange={value => onPageSizeChange(Number(value))}
+						>
+							<SelectTrigger className="w-[75px]">
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>

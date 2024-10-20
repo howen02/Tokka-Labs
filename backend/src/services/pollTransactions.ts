@@ -12,7 +12,7 @@ export const fetchRecentTransactions = () =>
 			startblock: '0',
 			endblock: '99999999',
 			page: '1',
-			offset: '50',
+			offset: '10_000',
 			sort: 'desc'
 		})
 	).then(buildRequestAndFetch<Transaction[]>)

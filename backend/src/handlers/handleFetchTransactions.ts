@@ -7,14 +7,22 @@ import {
 	queryTransactionsInTimeRange
 } from '../db/query'
 
-export const queryTransactions = (
-	startTime: string | undefined,
-	endTime: string | undefined
+export const getRecentTransactions = (page: number, pageSize: number) =>
+	Promise.resolve(queryRecentTransactions(page, pageSize))
+		.then(txs => ({
+			status: 200,
+			body: { message: `${txs.length} transaction(s) found`, data: txs }
+		}))
+		.catch(err => ({ status: 404, body: { message: err } }))
+
+export const getTransactionsInTimeRange = (
+	startTime: string,
+	endTime: string,
+	page: number,
+	pageSize: number
 ) =>
 	Promise.resolve(
-		startTime && endTime ?
-			findTransactionsInTimeRange(startTime, endTime)
-		:	queryRecentTransactions()
+		findTransactionsInTimeRange(startTime, endTime, page, pageSize)
 	)
 		.then(txs => ({
 			status: 200,
@@ -22,7 +30,12 @@ export const queryTransactions = (
 		}))
 		.catch(err => ({ status: 404, body: { message: err } }))
 
-const findTransactionsInTimeRange = (start: string, end: string) =>
+const findTransactionsInTimeRange = (
+	start: string,
+	end: string,
+	page: number,
+	pageSize: number
+) =>
 	Promise.resolve({ start, end })
 		.then(({ start, end }) => queryTransactionsInTimeRange(start, end))
 		.then(txs =>
@@ -74,7 +87,7 @@ const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 			endblock: end.toString(),
 			page: '1',
 			offset: '10_000',
-			sort: 'asc'
+			sort: 'desc'
 		})
 	)
 		.then(buildRequestAndFetch<Transaction[]>)
