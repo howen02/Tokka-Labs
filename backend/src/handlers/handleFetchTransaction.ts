@@ -19,7 +19,7 @@ const fetchTransaction = (hash: string) =>
 			insertTransactionIntoDb(tx)
 			return tx
 		})
-		.catch(err => Promise.reject('Error fetching transaction' + err))
+		.catch(err => Promise.reject('Error fetching transaction: ' + err))
 
 const fetchTransactionReceipt = (hash: string) =>
 	Promise.resolve(
@@ -31,7 +31,7 @@ const fetchTransactionReceipt = (hash: string) =>
 	)
 		.then(buildRequestAndFetch<TransactionReceipt>)
 		.then(res => res.result)
-		.catch(err => Promise.reject('Error fetching transaction receipt' + err))
+		.catch(err => Promise.reject('Error fetching transaction receipt: ' + err))
 
 const appendTimeStamp = (receipt: TransactionReceipt) =>
 	Promise.resolve(
@@ -51,10 +51,10 @@ const appendTimeStamp = (receipt: TransactionReceipt) =>
 					timeStamp: parseInt(res.result.timeStamp)
 				}) as Transaction
 		)
-		.catch(err => Promise.reject('Error fetching block reward' + err))
+		.catch(err => Promise.reject('Error fetching block reward: ' + err))
 
 export const appendEthPrice = (tx: Transaction) =>
 	Promise.resolve(tx.timeStamp)
 		.then(fetchHistoricalEthPrice)
 		.then(price => ({ ...tx, ethPrice: price }))
-		.catch(err => Promise.reject('Error appending ETH price' + err))
+		.catch(err => Promise.reject('Error appending ETH price: ' + err))

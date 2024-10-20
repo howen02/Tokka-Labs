@@ -37,7 +37,7 @@ export const queryTransactionsInTimeRange = (
 		)
 		.all(
 			Number(start),
-			Number(end),
+			Number(end) + 86399,
 			pageSize,
 			(page - 1) * pageSize
 		) as Transaction[]
