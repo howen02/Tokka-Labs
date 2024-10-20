@@ -5,10 +5,15 @@ services:
       dockerfile: Dockerfile
       target: frontend-build
     ports:
-      - "4173:4173"
+      - '4173:4173'
     environment:
       - NODE_ENV=production
-    command: ["sh", "-c", "cd /app/frontend && echo 'Starting frontend...' && npm run start"]
+    command:
+      [
+        'sh',
+        '-c',
+        "cd /app/frontend && echo 'Starting frontend...' && npm run start"
+      ]
 
   backend:
     build:
@@ -16,7 +21,12 @@ services:
       dockerfile: Dockerfile
       target: backend-build
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
-    command: ["sh", "-c", "cd /app/backend && echo 'Starting backend...' && bun run start"]
+    command:
+      [
+        'sh',
+        '-c',
+        "cd /app/backend && echo 'Starting backend...' && bun run start"
+      ]
