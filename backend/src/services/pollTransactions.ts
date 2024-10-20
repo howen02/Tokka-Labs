@@ -29,4 +29,4 @@ export const pollTransactions = () =>
 				`[${new Date().toLocaleString()}] Successfully polled transactions`
 			)
 		)
-		.catch(err => console.error('Error fetching transactions:', err))
+		.catch(err => console.error(`[${new Date().toLocaleString()}] Error polling transactions:` + err))
