@@ -46,7 +46,8 @@ export function TransactionsTable({
 						<TableRow>
 							<TableHead>Hash</TableHead>
 							<TableHead>Block</TableHead>
-							<TableHead>Gas</TableHead>
+							<TableHead>USDT</TableHead>
+							<TableHead>ETH</TableHead>
 							<TableHead>Timestamp</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -59,7 +60,8 @@ export function TransactionsTable({
 										transaction.hash.slice(-4)}
 								</TableCell>
 								<TableCell>{transaction.blockNumber}</TableCell>
-								<TableCell>{transaction.gasUsed} </TableCell>
+								<TableCell>{transaction.gasUsed}</TableCell>
+								<TableCell>{transaction.gasUsed}</TableCell>
 								<TableCell className="tabular-nums">
 									{new Date(transaction.timeStamp * 1000).toLocaleString()}
 								</TableCell>

@@ -39,7 +39,7 @@ export function DateRangePicker({
 									{format(value.to, 'LLL dd, y')}
 								</>
 							:	format(value.from, 'LLL dd, y')
-						:	<span>Transaction Date Range</span>}
+						:	<span>Date</span>}
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent className="w-auto p-0" align="start">
@@ -48,6 +48,7 @@ export function DateRangePicker({
 						selected={value}
 						onSelect={onChange}
 						numberOfMonths={2}
+						disabled={{ after: new Date() }}
 					/>
 				</PopoverContent>
 			</Popover>
