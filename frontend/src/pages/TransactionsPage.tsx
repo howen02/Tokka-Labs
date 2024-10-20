@@ -11,7 +11,12 @@ import { X } from 'lucide-react'
 import EthPriceCard from '@/components/EthPrice.tsx'
 
 const fetchTransactions = (page: number, pageSize: number) =>
-	Promise.resolve(new URLSearchParams({ page: page.toString(), pageSize: pageSize.toString() }))
+	Promise.resolve(
+		new URLSearchParams({
+			page: page.toString(),
+			pageSize: pageSize.toString()
+		})
+	)
 		.then(params => fetch(`${BACKEND_URL}/transactions?${params}`))
 		.then(response => response.json())
 		.then((data: Response<Transaction[]>) => data.body.data)
@@ -21,13 +26,20 @@ const fetchTransactionByHash = (hash: string) =>
 		.then(response => response.json())
 		.then((data: Response<Transaction[]>) => data.body.data)
 
-const fetchTransactionsByTimeRange = (start: number, end: number, page: number, pageSize: number) =>
-	Promise.resolve(new URLSearchParams({
-		start: start.toString(),
-		end: end.toString(),
-		page: page.toString(),
-		pageSize: pageSize.toString()
-	}))
+const fetchTransactionsByTimeRange = (
+	start: number,
+	end: number,
+	page: number,
+	pageSize: number
+) =>
+	Promise.resolve(
+		new URLSearchParams({
+			start: start.toString(),
+			end: end.toString(),
+			page: page.toString(),
+			pageSize: pageSize.toString()
+		})
+	)
 		.then(params => fetch(`${BACKEND_URL}/transactions/range?${params}`))
 		.then(response => response.json())
 		.then((data: Response<Transaction[]>) => data.body.data)
@@ -51,13 +63,20 @@ function TransactionsPage() {
 				end: dateRange?.to ? processDate(dateRange.to) : undefined
 			}
 		],
-		queryFn: ({ queryKey }: { queryKey: [string, {
-				page: number
-				pageSize: number
-				hash?: string
-				start?: number
-				end?: number
-			}] }) => {
+		queryFn: ({
+			queryKey
+		}: {
+			queryKey: [
+				string,
+				{
+					page: number
+					pageSize: number
+					hash?: string
+					start?: number
+					end?: number
+				}
+			]
+		}) => {
 			const [_, { page, pageSize, hash, start, end }] = queryKey
 			switch (true) {
 				case !!hash:
@@ -87,7 +106,8 @@ function TransactionsPage() {
 		setDateRange(undefined)
 	}
 
-	const hasNextPage = (transactions && transactions.length === pageSize) ?? false
+	const hasNextPage =
+		(transactions && transactions.length === pageSize) ?? false
 
 	return (
 		<div className="h-screen flex justify-center items-center">
@@ -100,11 +120,7 @@ function TransactionsPage() {
 						onChange={e => setTransactionHash(e.target.value.trim())}
 					/>
 					<DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
-					<Button
-						className="w-2"
-						variant="destructive"
-						onClick={resetFilters}
-					>
+					<Button className="w-2" variant="destructive" onClick={resetFilters}>
 						<X />
 					</Button>
 					<EthPriceCard />

@@ -17,7 +17,7 @@ function EthPriceCard() {
 	const { data: price } = useQuery({
 		queryKey: ['ethPrice'],
 		queryFn: fetchEthPrice,
-		refetchInterval: 60 * 1000,
+		refetchInterval: 60 * 1000
 	})
 
 	return (

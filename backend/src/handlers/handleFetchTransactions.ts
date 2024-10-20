@@ -56,7 +56,9 @@ const fetchTransactionsInTimeRange = (start: string, end: string) =>
 		.then(({ startBlock, endBlock }) =>
 			fetchTransactionsBetweenBlocks(startBlock, endBlock)
 		)
-		.catch(err => Promise.reject('Error fetching transactions' + err))
+		.catch(err =>
+			Promise.reject('Error fetching transactions in time range: ' + err)
+		)
 
 const fetchBlockWithTimestamp = (
 	timestamp: number,
@@ -72,7 +74,7 @@ const fetchBlockWithTimestamp = (
 	)
 		.then(buildRequestAndFetch<number>)
 		.then(res => res.result)
-		.catch(err => Promise.reject('Error fetching block with timestamp' + err))
+		.catch(err => Promise.reject('Error fetching block with timestamp: ' + err))
 
 const fetchBlockRange = (start: string, end: string) =>
 	Promise.all([
@@ -80,7 +82,7 @@ const fetchBlockRange = (start: string, end: string) =>
 		fetchBlockWithTimestamp(parseInt(end), 'before')
 	])
 		.then(([startBlock, endBlock]) => ({ startBlock, endBlock }))
-		.catch(err => Promise.reject('Error fetching block range' + err))
+		.catch(err => Promise.reject('Error fetching block range: ' + err))
 
 const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 	Promise.resolve(
@@ -104,5 +106,5 @@ const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 			insertTransactionsIntoDb(transactions).then(() => transactions)
 		)
 		.catch(err =>
-			Promise.reject('Error fetching transactions between blocks' + err)
+			Promise.reject('Error fetching transactions between blocks: ' + err)
 		)
