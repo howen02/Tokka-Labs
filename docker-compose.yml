@@ -8,8 +8,13 @@ services:
       - '4173:4173'
     environment:
       - NODE_ENV=production
-      - NGINX_PROXY=http://localhost:8080  # Point to Nginx reverse proxy
-    command: ["sh", "-c", "cd /app/frontend && echo 'Starting frontend...' && npm run start"]
+      - NGINX_PROXY=http://localhost:8080 # Point to Nginx reverse proxy
+    command:
+      [
+        'sh',
+        '-c',
+        "cd /app/frontend && echo 'Starting frontend...' && npm run start"
+      ]
 
   backend:
     build:
@@ -19,7 +24,12 @@ services:
     environment:
       - NODE_ENV=production
       - REDIS_HOST=redis
-    command: ["sh", "-c", "cd /app/backend && echo 'Starting backend...' && bun run start"]
+    command:
+      [
+        'sh',
+        '-c',
+        "cd /app/backend && echo 'Starting backend...' && bun run start"
+      ]
     depends_on:
       - redis
     deploy:

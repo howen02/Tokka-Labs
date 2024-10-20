@@ -48,7 +48,8 @@ describe('Uniswap Transaction App', () => {
 
 	it('should return a specific transaction', async () => {
 		console.log('\nTesting: GET /transaction/:hash')
-		const transactionHash = '0x123'
+		const transactionHash =
+			'0x5f13fb93b0ba6eda4f51c18300be2313a88e26fc4e63f93494a8f44a6c96b39a'
 		console.log(`Testing with transaction hash: ${transactionHash}`)
 
 		const response = await fetch(
@@ -64,7 +65,26 @@ describe('Uniswap Transaction App', () => {
 		expect(body.body).toHaveProperty('message')
 		expect(body.body).toHaveProperty('data')
 
-		expect(body.body.data).toBe(null)
+		console.log(`Returned message: ${body.body.message}`)
+	})
+
+	it("shouldn't return a transaction", async () => {
+		console.log('\nTesting: GET /transaction/:hash')
+		const transactionHash = 'invalidhash'
+		console.log(`Testing with transaction hash: ${transactionHash}`)
+
+		const response = await fetch(
+			`http://localhost:3000/transaction/${transactionHash}`
+		)
+		console.log(`Expected status: 200, Actual status: ${response.status}`)
+		expect(response.status).toBe(200)
+
+		const body = await response.json()
+
+		expect(body).toHaveProperty('status', 404)
+		expect(body).toHaveProperty('body')
+		expect(body.body).toHaveProperty('message')
+		expect(body.body.message).toBe('Transaction not found')
 
 		console.log(`Returned message: ${body.body.message}`)
 	})

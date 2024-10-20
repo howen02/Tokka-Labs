@@ -10,11 +10,15 @@ import { appendEthPrice } from './handleFetchTransaction'
 
 export const getRecentTransactions = (page: number, pageSize: number) =>
 	Promise.resolve(queryRecentTransactions(page, pageSize))
-		.then(txs => ({
-			status: 200,
-			body: { message: `${txs.length} transaction(s) found`, data: txs }
-		}))
-		.catch(err => ({ status: 404, body: { message: err } }))
+		.then(txs =>
+			txs ?
+				{
+					status: 200,
+					body: { message: `${txs.length} transaction(s) found`, data: txs }
+				}
+			:	{ status: 404, body: { message: 'No transactions found' } }
+		)
+		.catch(err => ({ status: 500, body: { message: err } }))
 
 export const getTransactionsInTimeRange = (
 	startTime: string,

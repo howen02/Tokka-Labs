@@ -5,11 +5,15 @@ import { insertTransactionIntoDb, queryTransaction } from '../db/query'
 export const getTransaction = (hash: string) =>
 	Promise.resolve(hash)
 		.then(queryTransaction || fetchTransaction)
-		.then(tx => ({
-			status: 200,
-			body: { message: 'Transaction found', data: tx }
-		}))
-		.catch(err => ({ status: 404, body: { message: err } }))
+		.then(tx =>
+			tx ?
+				{
+					status: 200,
+					body: { message: 'Transaction found', data: tx }
+				}
+			:	{ status: 404, body: { message: 'Transaction not found' } }
+		)
+		.catch(err => ({ status: 500, body: { message: err } }))
 
 const fetchTransaction = (hash: string) =>
 	fetchTransactionReceipt(hash)
