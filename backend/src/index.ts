@@ -17,7 +17,9 @@ const LEADER_KEY = 'leader';
 const LEADER_TTL = 60; // Longer TTL since we aren't renewing
 
 const app = new Elysia()
-	.use(cors())
+	.use(cors({
+		origin: ['http://localhost:4173', 'http://frontend:4173', 'http://localhost:8080'],
+	}))
 	.onRequest(({ request: { method, url } }) =>
 		console.log(`[${new Date().toLocaleString()}] Request: ${method} ${url}`)
 	)
