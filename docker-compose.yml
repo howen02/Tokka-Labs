@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       target: frontend-build
     ports:
-      - '4173:4173'
+      - '5173:4173'
     environment:
       - NODE_ENV=production
     command:

@@ -26,7 +26,7 @@ COPY --from=backend-build /app/backend /app/backend
 RUN cd /app/backend && bun add redis
 
 # Clean up potential cache
-RUN rm -rf /app/frontend/node_modules /app/frontend/.vite /app/backend/node_modules
+    RUN rm -rf /app/frontend/node_modules /app/frontend/.vite /app/backend/node_modules
 
 # Set environment variables
 ENV NODE_ENV=production

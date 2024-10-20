@@ -79,47 +79,36 @@ Before proceeding with either the manual setup or setup using scripts, you need 
 
 4. Open your browser and navigate to `http://localhost:5173` to view the application.
 
-### Setup Using Scripts
-
-We provide two setup scripts for your convenience: one for local setup and one for Docker setup.
-
-1. First, make the scripts executable:
-   ```
-   chmod +x local.sh docker.sh
-   ```
-
-2. For local setup, run:
-   ```
-   ./local.sh
-   ```
-
-3. For Docker setup, run:
-   ```
-   ./docker.sh
-   ```
-
-Remember to set up your environment variables as described in the [Environment Setup](#environment-setup) section before running these scripts.
-
 ## Running Tests
 
 To run tests:
 
-```
-bun test
-```
+    ```
+    bun test
+    ```
 
 ## Docker Instructions
 
-1. Ensure Docker and Docker Compose are installed on your system.
+1. Head to `constants.ts` in the frontend directory and swap the backend urls
 
-2. Build and start the containers:
+    ```
+    // Comment this out for docker, this points to the backend
+    export const BACKEND_URL = 'http://localhost:3000'
+    
+    // Uncomment this for docker, this points to the NGINX proxy
+    // export const BACKEND_URL = 'http://localhost:8080'
+   ```
+
+2. Ensure Docker and Docker Compose are installed on your system.
+
+3. Build and start the containers:
    ```
    docker-compose up --build
    ```
+   
+4. The application will be available at `http://localhost:4173`.
 
-3. The application will be available at `http://localhost:5173`.
-
-4. To stop the containers:
+5. To stop the containers:
    ```
    docker-compose down
    ```
