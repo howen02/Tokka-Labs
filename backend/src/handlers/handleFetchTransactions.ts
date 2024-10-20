@@ -6,7 +6,7 @@ import {
 	queryRecentTransactions,
 	queryTransactionsInTimeRange
 } from '../db/query'
-import {appendEthPrice} from "./handleFetchTransaction";
+import { appendEthPrice } from './handleFetchTransaction'
 
 export const getRecentTransactions = (page: number, pageSize: number) =>
 	Promise.resolve(queryRecentTransactions(page, pageSize))
@@ -97,10 +97,11 @@ const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 	)
 		.then(buildRequestAndFetch<Transaction[]>)
 		.then(res => res.result)
-		.then(transactions => Promise.all(transactions.map(transaction => appendEthPrice(transaction))))
 		.then(transactions =>
-			insertTransactionsIntoDb(transactions)
-			.then(() => transactions)
+			Promise.all(transactions.map(transaction => appendEthPrice(transaction)))
+		)
+		.then(transactions =>
+			insertTransactionsIntoDb(transactions).then(() => transactions)
 		)
 		.catch(err =>
 			Promise.reject('Error fetching transactions between blocks' + err)

@@ -16,7 +16,7 @@ export const insertTransactionIntoDb = (transaction: Transaction) =>
 		)
 
 export const insertTransactionsIntoDb = (transactions: Transaction[]) =>
-  Promise.all(transactions.map(insertTransactionIntoDb));
+	Promise.all(transactions.map(insertTransactionIntoDb))
 
 export const queryRecentTransactions = (page: number, pageSize: number) =>
 	db

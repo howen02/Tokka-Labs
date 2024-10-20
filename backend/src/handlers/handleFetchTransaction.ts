@@ -1,6 +1,6 @@
 import { Transaction, TransactionReceipt } from '../types'
-import {buildRequestAndFetch, fetchHistoricalEthPrice} from '../utils'
-import {insertTransactionIntoDb, queryTransaction} from '../db/query'
+import { buildRequestAndFetch, fetchHistoricalEthPrice } from '../utils'
+import { insertTransactionIntoDb, queryTransaction } from '../db/query'
 
 export const getTransaction = (hash: string) =>
 	Promise.resolve(hash)
@@ -10,8 +10,6 @@ export const getTransaction = (hash: string) =>
 			body: { message: 'Transaction found', data: tx }
 		}))
 		.catch(err => ({ status: 404, body: { message: err } }))
-
-
 
 const fetchTransaction = (hash: string) =>
 	fetchTransactionReceipt(hash)

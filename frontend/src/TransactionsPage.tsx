@@ -7,8 +7,8 @@ import { Input } from '@/components/ui/input.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import { DateRangePicker } from '@/components/DateRangePicker.tsx'
 import { DateRange } from 'react-day-picker'
-import {X} from "lucide-react";
-import EthPriceCard from "@/components/EthPrice.tsx";
+import { X } from 'lucide-react'
+import EthPriceCard from '@/components/EthPrice.tsx'
 
 function TransactionsPage() {
 	const [page, setPage] = useState(1)
@@ -78,8 +78,8 @@ function TransactionsPage() {
 		setDateRange(newDateRange)
 
 	const resetFilters = () => {
-		setTransactionHash("");
-		setDateRange(undefined);
+		setTransactionHash('')
+		setDateRange(undefined)
 	}
 
 	const hasNextPage =
@@ -95,9 +95,15 @@ function TransactionsPage() {
 						value={transactionHash}
 						onChange={e => setTransactionHash(e.target.value)}
 					/>
-					<DateRangePicker value={dateRange} onChange={handleDateRangeChange}/>
-					<Button className="w-2" variant="destructive" onClick={() => resetFilters()}><X/></Button>
-					<EthPriceCard/>
+					<DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
+					<Button
+						className="w-2"
+						variant="destructive"
+						onClick={() => resetFilters()}
+					>
+						<X />
+					</Button>
+					<EthPriceCard />
 				</div>
 				<TransactionsTable
 					transactions={transactions || []}

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo } from 'react'
 import {
 	Table,
 	TableBody,
@@ -6,57 +6,66 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow
-} from '@/components/ui/table';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { SelectPageSize } from './SelectPageSize';
-import {ChevronLeft, ChevronRight } from 'lucide-react';
-import {Transaction} from "@/types.ts";
+} from '@/components/ui/table'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Button } from '@/components/ui/button'
+import { SelectPageSize } from './SelectPageSize'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Transaction } from '@/types.ts'
 
 type TransactionsTableProps = {
-	transactions: Transaction[] | Transaction;
-	page: number;
-	pageSize: number;
-	onPageChange: (page: number) => void;
-	onPageSizeChange: (pageSize: number) => void;
-	hasNextPage: boolean;
-};
+	transactions: Transaction[] | Transaction
+	page: number
+	pageSize: number
+	onPageChange: (page: number) => void
+	onPageSizeChange: (pageSize: number) => void
+	hasNextPage: boolean
+}
 
-const calculateGasCost = (gasUsed: number, gasPrice: number, ethPrice: number) => {
-	const gasCostWei = BigInt(gasUsed) * BigInt(gasPrice);
-	const gasCostEth = Number(gasCostWei) / 1e18;
-	const gasCostUsdt = gasCostEth * ethPrice;
-	return { gasCostEth, gasCostUsdt };
-};
+const calculateGasCost = (
+	gasUsed: number,
+	gasPrice: number,
+	ethPrice: number
+) => {
+	const gasCostWei = BigInt(gasUsed) * BigInt(gasPrice)
+	const gasCostEth = Number(gasCostWei) / 1e18
+	const gasCostUsdt = gasCostEth * ethPrice
+	return { gasCostEth, gasCostUsdt }
+}
 
 export function TransactionsTable({
-									  transactions,
-									  page,
-									  onPageChange,
-									  onPageSizeChange,
-									  hasNextPage
-								  }: TransactionsTableProps) {
-	const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
+	transactions,
+	page,
+	onPageChange,
+	onPageSizeChange,
+	hasNextPage
+}: TransactionsTableProps) {
+	const transactionsArray =
+		Array.isArray(transactions) ? transactions : [transactions]
 
 	const handlePageSizeChange = (newPageSize: number) => {
-		onPageSizeChange(newPageSize);
-	};
+		onPageSizeChange(newPageSize)
+	}
 
 	const navigateToEtherscan = (hash: string) =>
-		window.open(`https://etherscan.io/tx/${hash}`, '_blank');
+		window.open(`https://etherscan.io/tx/${hash}`, '_blank')
 
 	const totalGasCosts = useMemo(() => {
 		return transactionsArray.reduce(
 			(acc, tx) => {
-				const { gasCostEth, gasCostUsdt } = calculateGasCost(tx.gasUsed, tx.gasPrice, tx.ethPrice);
+				const { gasCostEth, gasCostUsdt } = calculateGasCost(
+					tx.gasUsed,
+					tx.gasPrice,
+					tx.ethPrice
+				)
 				return {
 					eth: acc.eth + gasCostEth,
 					usdt: acc.usdt + gasCostUsdt
-				};
+				}
 			},
 			{ eth: 0, usdt: 0 }
-		);
-	}, [transactionsArray]);
+		)
+	}, [transactionsArray])
 
 	return (
 		<div className="w-full rounded-2xl overflow-hidden border border-gray-200">
@@ -79,14 +88,27 @@ export function TransactionsTable({
 									onClick={() => navigateToEtherscan(transaction.hash)}
 									title="View on Etherscan"
 								>
-									{transaction.hash.slice(0, 5) + '...' + transaction.hash.slice(-3)}
-								</TableCell>
-								<TableCell className="w-1/6">{transaction.blockNumber}</TableCell>
-								<TableCell className="w-1/6">
-									${calculateGasCost(transaction.gasUsed, transaction.gasPrice, transaction.ethPrice).gasCostUsdt.toFixed(2)}
+									{transaction.hash.slice(0, 5) +
+										'...' +
+										transaction.hash.slice(-3)}
 								</TableCell>
 								<TableCell className="w-1/6">
-									{calculateGasCost(transaction.gasUsed, transaction.gasPrice, transaction.ethPrice).gasCostEth.toFixed(6)}
+									{transaction.blockNumber}
+								</TableCell>
+								<TableCell className="w-1/6">
+									$
+									{calculateGasCost(
+										transaction.gasUsed,
+										transaction.gasPrice,
+										transaction.ethPrice
+									).gasCostUsdt.toFixed(2)}
+								</TableCell>
+								<TableCell className="w-1/6">
+									{calculateGasCost(
+										transaction.gasUsed,
+										transaction.gasPrice,
+										transaction.ethPrice
+									).gasCostEth.toFixed(6)}
 								</TableCell>
 								<TableCell className="w-1/3">
 									{new Date(transaction.timeStamp * 1000).toLocaleString()}
@@ -125,5 +147,5 @@ export function TransactionsTable({
 				</div>
 			</div>
 		</div>
-	);
+	)
 }
