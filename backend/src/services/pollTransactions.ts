@@ -17,14 +17,9 @@ export const fetchRecentTransactions = () =>
 		})
 	).then(buildRequestAndFetch<Transaction[]>)
 
-export const pollTransactions = () => {
-	const poll = () =>
-		fetchRecentTransactions()
-			.then(res => res.result)
-			.then(insertTransactionsIntoDb)
-			.then(() => console.log('Fetched transactions at', new Date()))
-			.catch(err => console.error('Error fetching transactions:', err))
-
-	poll().then()
-	setInterval(poll, 5_000)
-}
+export const pollTransactions = () =>
+	fetchRecentTransactions()
+		.then(res => res.result)
+		.then(insertTransactionsIntoDb)
+		.then(() => 'Transactions fetched and inserted into database')
+		.catch(err => console.error('Error fetching transactions:', err))
