@@ -54,7 +54,7 @@ The backend stack was chosen out of my personal interest to explore Bun and its 
 
 ## Architecture
 
-![img.png](img.png)
+![img.png](architecture.png)
 
 The architecture consists of:
 - A client-side React application with React Query for efficient data fetching and caching.
@@ -63,7 +63,7 @@ The architecture consists of:
 - SQLite3 databases for each instance for data persistence.
 
 ### Frontend Design
-![img_2.png](img_2.png)
+![img_2.png](design.png)
 
 ## Availability, Scalability, and Reliability
 
