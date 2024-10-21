@@ -17,7 +17,24 @@ export const insertTransactionIntoDb = (transaction: Transaction) =>
 		)
 
 export const insertTransactionsIntoDb = (transactions: Transaction[]) =>
-	Promise.all(transactions.map(insertTransactionIntoDb))
+	Promise.resolve(transactions)
+		.then(txs => {
+			const placeholders = txs.map(() => '(?, ?, ?, ?, ?, ?)').join(', ')
+			const sql = `INSERT OR IGNORE INTO transactions (hash, blockNumber, gasUsed, gasPrice, ethPrice, timeStamp) VALUES ${placeholders}`
+			return { sql, txs }
+		})
+		.then(({ sql, txs }) => {
+			const values = txs.flatMap(t => [
+				t.hash,
+				t.blockNumber,
+				t.gasUsed,
+				t.gasPrice,
+				t.ethPrice,
+				t.timeStamp
+			])
+			return { sql, values }
+		})
+		.then(({ sql, values }) => db.query(sql).run(...values))
 
 export const queryRecentTransactions = (page: number, pageSize: number) =>
 	db
