@@ -68,7 +68,7 @@ export function TransactionsTable({
 			}),
 			{ eth: 0, usdt: 0 }
 		)
-	}, [transactionsWithGasCosts])
+	}, [transactionsArray])
 
 	return (
 		<div className="w-full rounded-2xl overflow-hidden border border-gray-200">
