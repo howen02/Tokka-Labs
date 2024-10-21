@@ -2,7 +2,7 @@ import {
 	BINANCE_ETH_PRICE_URL,
 	BINANCE_HISTORICAL_ETH_PRICE_URL,
 	ETHERSCAN_API_KEY,
-	ETHERSCAN_URL
+	ETHERSCAN_URL, FALLBACK_ETH_PRICE
 } from './constants'
 import {GenericResponse, Transaction} from './types'
 
@@ -23,11 +23,13 @@ export const buildRequestAndFetch = <T>(
 		.catch(err => Promise.reject(err))
 
 export const fetchLiveEthPrice = () =>
-	Promise.resolve(new URLSearchParams({ symbol: 'ETHUSDT' }))
-		.then(params => fetch(`${BINANCE_ETH_PRICE_URL}?${params.toString()}`))
+	fetch(BINANCE_ETH_PRICE_URL)
 		.then(res => res.json())
 		.then(res => parseFloat(res.price))
-		.catch(err => Promise.reject('Error fetching live ETH price: ' + err))
+		.catch(err => {
+			console.error('Error fetching live ETH price: ' + err + '\nUsing default value of ' + FALLBACK_ETH_PRICE)
+			return FALLBACK_ETH_PRICE
+		})
 
 export const fetchHistoricalEthPrice = (timeStamp: number) =>
 	Promise.resolve(
@@ -43,7 +45,10 @@ export const fetchHistoricalEthPrice = (timeStamp: number) =>
 		)
 		.then(res => res.json())
 		.then(data => parseFloat(data[0][4]))
-		.catch(err => Promise.reject('Error fetching historical ETH price: ' + err))
+		.catch(err => {
+			console.error('Error fetching historical ETH price: ' + err + '\nUsing default value of ' + FALLBACK_ETH_PRICE)
+			return FALLBACK_ETH_PRICE
+		})
 
 export const appendHistorialEthPrice = (tx: Transaction) =>
 	Promise.resolve(tx.timeStamp)
