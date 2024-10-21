@@ -112,8 +112,10 @@ const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 				txs.map(transaction => appendHistorialEthPrice(transaction))
 			)
 		)
-		.then(txs =>
-			insertTransactionsIntoDb(txs).then(() => txs)
+		.then(txs => {
+				insertTransactionsIntoDb(txs).then()
+				return txs
+			}
 		)
 		.catch(err =>
 			Promise.reject('Error fetching transactions between blocks: ' + err)
