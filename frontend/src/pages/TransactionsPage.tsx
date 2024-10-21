@@ -52,7 +52,7 @@ function TransactionsPage() {
 	const [transactionHash, setTransactionHash] = useState('')
 	const [dateRange, setDateRange] = useState<DateRange | undefined>()
 
-	const { data: transactions, isLoading, isFetching, refetch } = useQuery({
+	const { data: transactions, isLoading, refetch } = useQuery({
 		queryKey: [
 			'transactions',
 			{
@@ -128,7 +128,7 @@ function TransactionsPage() {
 					<EthPriceCard />
 				</div>
 				<TransactionsTable
-					isLoading={isLoading || isFetching}
+					isLoading={isLoading}
 					transactions={transactions || []}
 					page={page}
 					pageSize={pageSize}
