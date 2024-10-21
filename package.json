@@ -1,5 +1,4 @@
 {
-	"dependencies": { "web3": "^4.13.0" },
 	"devDependencies": {
 		"prettier": "^3.3.3"
 	},

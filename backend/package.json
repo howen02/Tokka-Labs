@@ -9,8 +9,10 @@
 	"dependencies": {
 		"@elysiajs/cors": "^1.1.1",
 		"@elysiajs/cron": "^1.1.1",
+		"@uniswap/v3-core": "^1.0.1",
 		"dotenv": "^16.4.5",
-		"elysia": "latest"
+		"elysia": "latest",
+		"web3": "^4.13.0"
 	},
 	"devDependencies": {
 		"bun-types": "latest",
