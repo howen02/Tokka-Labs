@@ -40,4 +40,4 @@ export const decodeSwapPrice = (hash: string) =>
 				return Number(price)
 			})
 		)
-		.then(prices => (prices.length ? prices : null))
+		.then(prices => (prices.length ? prices[0] : null))

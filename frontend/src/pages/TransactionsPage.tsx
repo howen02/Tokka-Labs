@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { BACKEND_URL } from '@/constants.ts'
-import { Transaction, Response } from '@/types.ts'
 import { TransactionsTable } from '@/components/TransactionsTable.tsx'
 import { Input } from '@/components/ui/input.tsx'
 import { Button } from '@/components/ui/button.tsx'
@@ -9,42 +7,13 @@ import { DateRangePicker } from '@/components/DateRangePicker.tsx'
 import { DateRange } from 'react-day-picker'
 import { X } from 'lucide-react'
 import EthPriceCard from '@/components/EthPrice.tsx'
-
-const fetchTransactions = (page: number, pageSize: number) =>
-	Promise.resolve(
-		new URLSearchParams({
-			page: page.toString(),
-			pageSize: pageSize.toString()
-		})
-	)
-		.then(params => fetch(`${BACKEND_URL}/transactions?${params}`))
-		.then(response => response.json())
-		.then((data: Response<Transaction[]>) => data.body.data)
-
-const fetchTransactionByHash = (hash: string) =>
-	fetch(`${BACKEND_URL}/transaction/${hash}`)
-		.then(response => response.json())
-		.then((data: Response<Transaction[]>) => data.body.data)
-
-const fetchTransactionsByTimeRange = (
-	start: number,
-	end: number,
-	page: number,
-	pageSize: number
-) =>
-	Promise.resolve(
-		new URLSearchParams({
-			start: start.toString(),
-			end: end.toString(),
-			page: page.toString(),
-			pageSize: pageSize.toString()
-		})
-	)
-		.then(params => fetch(`${BACKEND_URL}/transactions/range?${params}`))
-		.then(response => response.json())
-		.then((data: Response<Transaction[]>) => data.body.data)
-
-const processDate = (date: Date) => Math.floor(date.getTime() / 1000)
+import PriceDecoderCard from '@/components/PriceDecoderCard.tsx'
+import {
+	fetchTransactionByHash,
+	fetchTransactions,
+	fetchTransactionsByTimeRange,
+	processDate
+} from '@/util.ts'
 
 function TransactionsPage() {
 	const [page, setPage] = useState(1)
@@ -144,6 +113,7 @@ function TransactionsPage() {
 					onPageSizeChange={handlePageSizeChange}
 					hasNextPage={hasNextPage}
 				/>
+				<PriceDecoderCard />
 			</div>
 		</div>
 	)
