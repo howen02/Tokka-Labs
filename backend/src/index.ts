@@ -8,7 +8,7 @@ import { getTransaction } from './handlers/handleFetchTransaction'
 import { pollTransactionsCron } from './middleware'
 import {ORIGINS, SERVER_PORT} from './constants'
 
-const app = new Elysia()
+new Elysia()
 	.use(pollTransactionsCron)
 	.use(
 		cors({
