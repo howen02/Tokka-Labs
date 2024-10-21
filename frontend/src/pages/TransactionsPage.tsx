@@ -88,7 +88,7 @@ function TransactionsPage() {
 			}
 		},
 		staleTime: 10 * 60 * 1000,
-		refetchInterval: 1000
+		// refetchInterval: 1000
 	})
 
 	const handlePageChange = (newPage: number) => setPage(newPage)

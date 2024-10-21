@@ -1,6 +1,6 @@
 import { Transaction } from '../types'
 import {appendHistorialEthPrice, buildRequestAndFetch} from '../utils'
-import { UNISWAP_POOL_ADDRESS } from '../constants'
+import {END_OF_DAY_OFFSET, UNISWAP_POOL_ADDRESS} from '../constants'
 import {
 	insertTransactionsIntoDb,
 	queryRecentTransactions,
@@ -32,7 +32,7 @@ export const getTransactionsInTimeRange = (
 			status: 200,
 			body: { message: `${txs.length} transaction(s) found`, data: txs }
 		}))
-		.catch(err => ({ status: 404, body: { message: err } }))
+		.catch(err => ({ status: 404, body: { message: 'Error getting transactions in time range: ' + err } }))
 
 const findTransactionsInTimeRange = (
 	start: string,
@@ -49,16 +49,18 @@ const findTransactionsInTimeRange = (
 				fetchTransactionsInTimeRange(start, end).then(txs =>
 					txs.length ?
 						txs.slice((page - 1) * pageSize, page * pageSize)
-					:	Promise.reject('No transactions found')
+					:	Promise.reject('Error fetching transactions in time range')
 				)
 			)
 		)
+		.catch()
 
 const fetchTransactionsInTimeRange = (start: string, end: string) =>
 	fetchBlockRange(start, end)
 		.then(({ startBlock, endBlock }) =>
 			fetchTransactionsBetweenBlocks(startBlock, endBlock)
 		)
+		.then(transactions => transactions)
 		.catch(err =>
 			Promise.reject('Error fetching transactions in time range: ' + err)
 		)
@@ -82,7 +84,7 @@ const fetchBlockWithTimestamp = (
 const fetchBlockRange = (start: string, end: string) =>
 	Promise.all([
 		fetchBlockWithTimestamp(parseInt(start), 'after'),
-		fetchBlockWithTimestamp(parseInt(end), 'before')
+		fetchBlockWithTimestamp(parseInt(end) + END_OF_DAY_OFFSET, 'before')
 	])
 		.then(([startBlock, endBlock]) => ({ startBlock, endBlock }))
 		.catch(err => Promise.reject('Error fetching block range: ' + err))

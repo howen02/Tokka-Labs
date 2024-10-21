@@ -1,5 +1,6 @@
 import { Transaction } from '../types'
 import db from './db'
+import {END_OF_DAY_OFFSET} from "../constants";
 
 export const insertTransactionIntoDb = (transaction: Transaction) =>
 	db
@@ -37,7 +38,7 @@ export const queryTransactionsInTimeRange = (
 		)
 		.all(
 			Number(start),
-			Number(end) + 86399,
+			Number(end) + END_OF_DAY_OFFSET,
 			pageSize,
 			(page - 1) * pageSize
 		) as Transaction[]

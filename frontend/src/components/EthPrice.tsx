@@ -6,12 +6,13 @@ import {
 	TooltipProvider,
 	TooltipTrigger
 } from '@/components/ui/tooltip'
+import {FALLBACK_ETH_PRICE} from "@/constants.ts";
 
 const fetchEthPrice = () =>
 	fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT')
 		.then(res => res.json())
 		.then(data => data.price)
-		.catch(_ => 0)
+		.catch(_ => FALLBACK_ETH_PRICE)
 
 function EthPriceCard() {
 	const { data: price } = useQuery({

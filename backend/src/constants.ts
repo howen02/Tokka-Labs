@@ -9,6 +9,7 @@ export const BINANCE_ETH_PRICE_URL =
 export const BINANCE_HISTORICAL_ETH_PRICE_URL =
 	'https://api.binance.com/api/v3/klines'
 export const FALLBACK_ETH_PRICE = 2722.71
+export const END_OF_DAY_OFFSET = 86399
 
 export const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
 export const SERVER_PORT = 3000
