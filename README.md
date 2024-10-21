@@ -124,7 +124,7 @@ You will need an API key from [Etherscan](https://etherscan.io/apis) and [Infura
 
 ### Local Setup
 
-Note: If you run into issues with the local setup, you can use the Docker instructions below instead.
+#### Note: If you run into issues with the local setup, you can use the Docker instructions below instead.
 
 1. Clone the repository:
    ```
@@ -222,4 +222,4 @@ To run tests:
 
 ### Bonus (Optional)
 - [x] Consider and explain availability, scalability, and reliability in system design
-- [ ] Decode actual Uniswap swap price executed for each transaction (NOT IMPLEMENTED)
+- [x] Decode actual Uniswap swap price executed for each transaction
