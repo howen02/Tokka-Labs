@@ -158,7 +158,8 @@ You will need an API key from [Etherscan](https://etherscan.io/apis) and [Infura
 
 To run tests:
 
-    bun test
+1. Ensure your backend instance is running
+2. `bun test`
 
 ## Docker Instructions
 
