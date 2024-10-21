@@ -1,6 +1,6 @@
 import { Transaction } from '../types'
 import db from './db'
-import {END_OF_DAY_OFFSET} from "../constants";
+import { END_OF_DAY_OFFSET } from '../constants'
 
 export const insertTransactionIntoDb = (transaction: Transaction) =>
 	db

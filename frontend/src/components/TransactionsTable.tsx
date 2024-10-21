@@ -10,7 +10,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { SelectPageSize } from './SelectPageSize'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 import { Transaction } from '@/types.ts'
 
 type TransactionsTableProps = {
@@ -20,6 +20,7 @@ type TransactionsTableProps = {
 	onPageChange: (page: number) => void
 	onPageSizeChange: (pageSize: number) => void
 	hasNextPage: boolean
+	isLoading: boolean
 }
 
 const calculateGasCost = (
@@ -38,7 +39,8 @@ export function TransactionsTable({
 	page,
 	onPageChange,
 	onPageSizeChange,
-	hasNextPage
+	hasNextPage,
+	isLoading
 }: TransactionsTableProps) {
 	const transactionsArray =
 		Array.isArray(transactions) ? transactions : [transactions]
@@ -50,22 +52,23 @@ export function TransactionsTable({
 	const navigateToEtherscan = (hash: string) =>
 		window.open(`https://etherscan.io/tx/${hash}`, '_blank')
 
+	const transactionsWithGasCosts = useMemo(
+		() =>
+			transactionsArray.map(tx => ({
+				...tx,
+				...calculateGasCost(tx.gasUsed, tx.gasPrice, tx.ethPrice)
+			})),
+		[transactionsArray]
+	)
 	const totalGasCosts = useMemo(() => {
-		return transactionsArray.reduce(
-			(acc, tx) => {
-				const { gasCostEth, gasCostUsdt } = calculateGasCost(
-					tx.gasUsed,
-					tx.gasPrice,
-					tx.ethPrice
-				)
-				return {
-					eth: acc.eth + gasCostEth,
-					usdt: acc.usdt + gasCostUsdt
-				}
-			},
+		return transactionsWithGasCosts.reduce(
+			(acc, tx) => ({
+				eth: acc.eth + tx.gasCostEth,
+				usdt: acc.usdt + tx.gasCostUsdt
+			}),
 			{ eth: 0, usdt: 0 }
 		)
-	}, [transactionsArray])
+	}, [transactionsWithGasCosts])
 
 	return (
 		<div className="w-full rounded-2xl overflow-hidden border border-gray-200">
@@ -81,40 +84,42 @@ export function TransactionsTable({
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{transactionsArray.map(transaction => (
-							<TableRow key={transaction.hash} className="tabular-nums">
-								<TableCell
-									className="w-1/6 cursor-pointer text-blue-500"
-									onClick={() => navigateToEtherscan(transaction.hash)}
-									title="View on Etherscan"
-								>
-									{transaction.hash.slice(0, 5) +
-										'...' +
-										transaction.hash.slice(-3)}
-								</TableCell>
-								<TableCell className="w-1/6">
-									{transaction.blockNumber}
-								</TableCell>
-								<TableCell className="w-1/6">
-									$
-									{calculateGasCost(
-										transaction.gasUsed,
-										transaction.gasPrice,
-										transaction.ethPrice
-									).gasCostUsdt.toFixed(2)}
-								</TableCell>
-								<TableCell className="w-1/6">
-									{calculateGasCost(
-										transaction.gasUsed,
-										transaction.gasPrice,
-										transaction.ethPrice
-									).gasCostEth.toFixed(6)}
-								</TableCell>
-								<TableCell className="w-1/3">
-									{new Date(transaction.timeStamp * 1000).toLocaleString()}
+						{isLoading ?
+							<TableRow>
+								<TableCell colSpan={5} className="h-24 text-center">
+									<Loader2 className="h-8 w-8 animate-spin mx-auto" />
+									<p className="mt-2">
+										Loading transactions... This may take a while for older
+										data.
+									</p>
 								</TableCell>
 							</TableRow>
-						))}
+						:	transactionsWithGasCosts.map(transaction => (
+								<TableRow key={transaction.hash} className="tabular-nums">
+									<TableCell
+										className="w-1/6 cursor-pointer text-blue-500"
+										onClick={() => navigateToEtherscan(transaction.hash)}
+										title="View on Etherscan"
+									>
+										{transaction.hash.slice(0, 5) +
+											'...' +
+											transaction.hash.slice(-3)}
+									</TableCell>
+									<TableCell className="w-1/6">
+										{transaction.blockNumber}
+									</TableCell>
+									<TableCell className="w-1/6">
+										${transaction.gasCostUsdt.toFixed(2)}
+									</TableCell>
+									<TableCell className="w-1/6">
+										{transaction.gasCostEth.toFixed(6)}
+									</TableCell>
+									<TableCell className="w-1/3">
+										{new Date(transaction.timeStamp * 1000).toLocaleString()}
+									</TableCell>
+								</TableRow>
+							))
+						}
 					</TableBody>
 				</Table>
 			</ScrollArea>

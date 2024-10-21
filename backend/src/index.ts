@@ -6,7 +6,7 @@ import {
 } from './handlers/handleFetchTransactions'
 import { getTransaction } from './handlers/handleFetchTransaction'
 import { pollTransactionsCron } from './middleware'
-import {ORIGINS, SERVER_PORT} from './constants'
+import { ORIGINS, SERVER_PORT } from './constants'
 
 new Elysia()
 	.use(pollTransactionsCron)

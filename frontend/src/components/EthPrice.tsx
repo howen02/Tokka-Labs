@@ -6,7 +6,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger
 } from '@/components/ui/tooltip'
-import {FALLBACK_ETH_PRICE} from "@/constants.ts";
+import { FALLBACK_ETH_PRICE } from '@/constants.ts'
 
 const fetchEthPrice = () =>
 	fetch('https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT')

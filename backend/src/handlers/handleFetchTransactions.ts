@@ -1,6 +1,6 @@
 import { Transaction } from '../types'
-import {appendHistorialEthPrice, buildRequestAndFetch} from '../utils'
-import {END_OF_DAY_OFFSET, UNISWAP_POOL_ADDRESS} from '../constants'
+import { appendHistorialEthPrice, buildRequestAndFetch } from '../utils'
+import { END_OF_DAY_OFFSET, UNISWAP_POOL_ADDRESS } from '../constants'
 import {
 	insertTransactionsIntoDb,
 	queryRecentTransactions,
@@ -32,7 +32,10 @@ export const getTransactionsInTimeRange = (
 			status: 200,
 			body: { message: `${txs.length} transaction(s) found`, data: txs }
 		}))
-		.catch(err => ({ status: 404, body: { message: 'Error getting transactions in time range: ' + err } }))
+		.catch(err => ({
+			status: 404,
+			body: { message: 'Error getting transactions in time range: ' + err }
+		}))
 
 const findTransactionsInTimeRange = (
 	start: string,
@@ -105,7 +108,9 @@ const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 		.then(buildRequestAndFetch<Transaction[]>)
 		.then(res => res.result)
 		.then(transactions =>
-			Promise.all(transactions.map(transaction => appendHistorialEthPrice(transaction)))
+			Promise.all(
+				transactions.map(transaction => appendHistorialEthPrice(transaction))
+			)
 		)
 		.then(transactions =>
 			insertTransactionsIntoDb(transactions).then(() => transactions)

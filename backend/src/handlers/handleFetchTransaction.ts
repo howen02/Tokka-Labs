@@ -1,5 +1,5 @@
 import { Transaction, TransactionReceipt } from '../types'
-import {appendHistorialEthPrice, buildRequestAndFetch } from '../utils'
+import { appendHistorialEthPrice, buildRequestAndFetch } from '../utils'
 import { insertTransactionIntoDb, queryTransaction } from '../db/query'
 
 export const getTransaction = (hash: string) =>
@@ -56,4 +56,3 @@ const appendTimeStamp = (receipt: TransactionReceipt) =>
 				}) as Transaction
 		)
 		.catch(err => Promise.reject('Error fetching block reward: ' + err))
-

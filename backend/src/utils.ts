@@ -2,9 +2,10 @@ import {
 	BINANCE_ETH_PRICE_URL,
 	BINANCE_HISTORICAL_ETH_PRICE_URL,
 	ETHERSCAN_API_KEY,
-	ETHERSCAN_URL, FALLBACK_ETH_PRICE
+	ETHERSCAN_URL,
+	FALLBACK_ETH_PRICE
 } from './constants'
-import {GenericResponse, Transaction} from './types'
+import { GenericResponse, Transaction } from './types'
 
 export const buildUrl = (params: URLSearchParams) => {
 	if (!ETHERSCAN_API_KEY) throw new Error('ETHERSCAN_API_KEY is missing')
@@ -27,7 +28,12 @@ export const fetchLiveEthPrice = () =>
 		.then(res => res.json())
 		.then(res => parseFloat(res.price))
 		.catch(err => {
-			console.error('Error fetching live ETH price: ' + err + '\nUsing default value of ' + FALLBACK_ETH_PRICE)
+			console.error(
+				'Error fetching live ETH price: ' +
+					err +
+					'\nUsing default value of ' +
+					FALLBACK_ETH_PRICE
+			)
 			return FALLBACK_ETH_PRICE
 		})
 
@@ -46,7 +52,12 @@ export const fetchHistoricalEthPrice = (timeStamp: number) =>
 		.then(res => res.json())
 		.then(data => parseFloat(data[0][4]))
 		.catch(err => {
-			console.error('Error fetching historical ETH price: ' + err + '\nUsing default value of ' + FALLBACK_ETH_PRICE)
+			console.error(
+				'Error fetching historical ETH price: ' +
+					err +
+					'\nUsing default value of ' +
+					FALLBACK_ETH_PRICE
+			)
 			return FALLBACK_ETH_PRICE
 		})
 
