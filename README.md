@@ -124,6 +124,8 @@ You will need an API key from [Etherscan](https://etherscan.io/apis) and [Infura
 
 ### Local Setup
 
+Note: If you run into issues with the local setup, you can use the Docker instructions below instead.
+
 1. Clone the repository:
    ```
    git clone https://github.com/howen02/Tokka-Labs/
