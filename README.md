@@ -135,10 +135,10 @@ You will need an API key from [Etherscan](https://etherscan.io/apis) and [Infura
 3. Install dependencies:
    ```
    cd frontend
-   npm install --legacy-peer-deps
+   bun i
 
    cd ../backend
-   bun install
+   bun i
    ```
 
 4. Start the development servers, each in a separate terminal:
