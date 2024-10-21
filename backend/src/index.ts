@@ -7,6 +7,7 @@ import {
 import { getTransaction } from './handlers/handleFetchTransaction'
 import { pollTransactionsCron } from './middleware'
 import { ORIGINS, SERVER_PORT } from './constants'
+import { handleDecode } from './handlers/handleDecode'
 
 new Elysia()
 	.use(pollTransactionsCron)
@@ -32,4 +33,5 @@ new Elysia()
 			)
 	)
 	.get('/transaction/:hash', ({ params: { hash } }) => getTransaction(hash))
+	.get('/decode/:hash', ({ params: { hash } }) => handleDecode(hash))
 	.listen(SERVER_PORT)
