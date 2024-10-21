@@ -24,13 +24,13 @@ export const insertTransactionsIntoDb = (transactions: Transaction[]) =>
 			return { sql, txs }
 		})
 		.then(({ sql, txs }) => {
-			const values = txs.flatMap(t => [
-				t.hash,
-				t.blockNumber,
-				t.gasUsed,
-				t.gasPrice,
-				t.ethPrice,
-				t.timeStamp
+			const values = txs.flatMap(tx => [
+				tx.hash,
+				tx.blockNumber,
+				tx.gasUsed,
+				tx.gasPrice,
+				tx.ethPrice,
+				tx.timeStamp
 			])
 			return { sql, values }
 		})
