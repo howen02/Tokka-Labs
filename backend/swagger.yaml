@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Transaction API
   version: 1.0.0
-  description: API for retrieving Ethereum transaction data and fees.
+  description: API for retrieving Ethereum transaction data, fees, and decoding swap prices.
 servers:
   - url: http://localhost:3000
     description: Local development server
@@ -152,6 +152,52 @@ paths:
                   message:
                     type: string
                     example: 'Transaction not found'
+
+  /decode/{hash}:
+    get:
+      summary: Decode swap price for a transaction
+      description: Decodes and retrieves the swap price for a given transaction hash.
+      parameters:
+        - in: path
+          name: hash
+          required: true
+          schema:
+            type: string
+          description: The transaction hash to decode the swap price for.
+      responses:
+        '200':
+          description: Swap price decoded successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Price'
+                  data:
+                    type: number
+                    example: 1234.56
+        '404':
+          description: Price not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Price not found'
+        '500':
+          description: Error decoding price.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error decoding price: [error details]'
 
 components:
   schemas:

@@ -67,7 +67,7 @@ The architecture consists of:
 - SQLite3 databases for each instance for data persistence.
 
 ### Frontend Design
-![img_2.png](design.png)
+![img.png](design.png)
 
 ## Availability, Scalability, and Reliability
 
@@ -120,7 +120,7 @@ In this project, we're using Bun as it is a fast all-in-one JavaScript toolkit. 
 
 ### Environment Setup
 
-You will need an API key from Etherscan, sign up for one [here](https://etherscan.io/apis). The free tier is generous enough as it offers 100,000 free API calls per day.
+You will need an API key from [Etherscan](https://etherscan.io/apis) and [Infura](https://app.infura.io/).
 
 ### Local Setup
 
@@ -130,7 +130,7 @@ You will need an API key from Etherscan, sign up for one [here](https://ethersca
    cd tokka-labs
    ```
    
-2. Navigate to the backend directory, copy the `.env.example` file to a new file named `.env`, and fill in the API key for Etherscan.
+2. Navigate to the backend directory, copy the `.env.example` file to a new file named `.env`, and fill in the API keys.
 
 3. Install dependencies:
    ```
