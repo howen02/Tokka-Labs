@@ -52,7 +52,7 @@ function TransactionsPage() {
 	const [transactionHash, setTransactionHash] = useState('')
 	const [dateRange, setDateRange] = useState<DateRange | undefined>()
 
-	const { data: transactions, isLoading } = useQuery({
+	const { data: transactions, isLoading, isFetching, refetch } = useQuery({
 		queryKey: [
 			'transactions',
 			{
@@ -87,8 +87,8 @@ function TransactionsPage() {
 					return fetchTransactions(page, pageSize)
 			}
 		},
-		staleTime: 10 * 60 * 1000
-		// refetchInterval: 1000
+		staleTime: 5 * 1000,
+		refetchInterval: (transactionHash || dateRange) ? false : 1000
 	})
 
 	const handlePageChange = (newPage: number) => setPage(newPage)
@@ -101,9 +101,11 @@ function TransactionsPage() {
 	const handleDateRangeChange = (newDateRange: DateRange | undefined) =>
 		setDateRange(newDateRange)
 
-	const resetFilters = () => {
+	const handleResetFilters = () => {
 		setTransactionHash('')
 		setDateRange(undefined)
+		setPage(1)
+		refetch()
 	}
 
 	const hasNextPage =
@@ -120,13 +122,13 @@ function TransactionsPage() {
 						onChange={e => setTransactionHash(e.target.value.trim())}
 					/>
 					<DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
-					<Button className="w-2" variant="destructive" onClick={resetFilters}>
+					<Button className="w-2" variant="destructive" onClick={handleResetFilters}>
 						<X />
 					</Button>
 					<EthPriceCard />
 				</div>
 				<TransactionsTable
-					isLoading={isLoading}
+					isLoading={isLoading || isFetching}
 					transactions={transactions || []}
 					page={page}
 					pageSize={pageSize}
