@@ -1,12 +1,11 @@
 import { Transaction } from '../types'
-import { buildRequestAndFetch } from '../utils'
+import {appendHistorialEthPrice, buildRequestAndFetch} from '../utils'
 import { UNISWAP_POOL_ADDRESS } from '../constants'
 import {
 	insertTransactionsIntoDb,
 	queryRecentTransactions,
 	queryTransactionsInTimeRange
 } from '../db/query'
-import { appendEthPrice } from './handleFetchTransaction'
 
 export const getRecentTransactions = (page: number, pageSize: number) =>
 	Promise.resolve(queryRecentTransactions(page, pageSize))
@@ -104,7 +103,7 @@ const fetchTransactionsBetweenBlocks = (start: number, end: number) =>
 		.then(buildRequestAndFetch<Transaction[]>)
 		.then(res => res.result)
 		.then(transactions =>
-			Promise.all(transactions.map(transaction => appendEthPrice(transaction)))
+			Promise.all(transactions.map(transaction => appendHistorialEthPrice(transaction)))
 		)
 		.then(transactions =>
 			insertTransactionsIntoDb(transactions).then(() => transactions)

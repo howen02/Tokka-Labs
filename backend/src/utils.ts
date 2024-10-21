@@ -4,7 +4,7 @@ import {
 	ETHERSCAN_API_KEY,
 	ETHERSCAN_URL
 } from './constants'
-import { GenericResponse } from './types'
+import {GenericResponse, Transaction} from './types'
 
 export const buildUrl = (params: URLSearchParams) => {
 	if (!ETHERSCAN_API_KEY) throw new Error('ETHERSCAN_API_KEY is missing')
@@ -44,3 +44,9 @@ export const fetchHistoricalEthPrice = (timeStamp: number) =>
 		.then(res => res.json())
 		.then(data => parseFloat(data[0][4]))
 		.catch(err => Promise.reject('Error fetching historical ETH price: ' + err))
+
+export const appendHistorialEthPrice = (tx: Transaction) =>
+	Promise.resolve(tx.timeStamp)
+		.then(fetchHistoricalEthPrice)
+		.then(price => ({ ...tx, ethPrice: price }))
+		.catch(err => Promise.reject('Error appending ETH price: ' + err))

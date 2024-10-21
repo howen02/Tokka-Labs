@@ -1,5 +1,5 @@
 import { Transaction, TransactionReceipt } from '../types'
-import { buildRequestAndFetch, fetchHistoricalEthPrice } from '../utils'
+import {appendHistorialEthPrice, buildRequestAndFetch } from '../utils'
 import { insertTransactionIntoDb, queryTransaction } from '../db/query'
 
 export const getTransaction = (hash: string) =>
@@ -18,7 +18,7 @@ export const getTransaction = (hash: string) =>
 const fetchTransaction = (hash: string) =>
 	fetchTransactionReceipt(hash)
 		.then(appendTimeStamp)
-		.then(appendEthPrice)
+		.then(appendHistorialEthPrice)
 		.then(tx => {
 			insertTransactionIntoDb(tx)
 			return tx
@@ -57,8 +57,3 @@ const appendTimeStamp = (receipt: TransactionReceipt) =>
 		)
 		.catch(err => Promise.reject('Error fetching block reward: ' + err))
 
-export const appendEthPrice = (tx: Transaction) =>
-	Promise.resolve(tx.timeStamp)
-		.then(fetchHistoricalEthPrice)
-		.then(price => ({ ...tx, ethPrice: price }))
-		.catch(err => Promise.reject('Error appending ETH price: ' + err))
