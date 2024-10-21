@@ -6,17 +6,13 @@ import {
 } from './handlers/handleFetchTransactions'
 import { getTransaction } from './handlers/handleFetchTransaction'
 import { pollTransactionsCron } from './middleware'
-import { SERVER_PORT } from './constants'
+import {ORIGINS, SERVER_PORT} from './constants'
 
 const app = new Elysia()
 	.use(pollTransactionsCron)
 	.use(
 		cors({
-			origin: [
-				'http://localhost:4173',
-				'http://localhost:8080',
-				'http://localhost:5173'
-			]
+			origin: ORIGINS
 		})
 	)
 	.onRequest(({ request: { method, url } }) =>
