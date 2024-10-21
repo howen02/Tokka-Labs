@@ -10,7 +10,7 @@ export const BINANCE_HISTORICAL_ETH_PRICE_URL =
 	'https://api.binance.com/api/v3/klines'
 
 export const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
-export const SERVER_PORT = process.env.SERVER_PORT || 3000
+export const SERVER_PORT = 3000
 export const ORIGINS = [
 	'http://localhost:8080',
 	'http://localhost:5173'

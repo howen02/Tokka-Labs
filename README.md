@@ -160,26 +160,16 @@ To run tests:
 
 ## Docker Instructions
 
-1. Head to `constants.ts` in the frontend directory and swap the backend urls
+1. Ensure Docker and Docker Compose are installed on your system.
 
-    ```
-    // Comment this out for docker, this points to the backend
-    export const BACKEND_URL = 'http://localhost:3000'
-    
-    // Uncomment this for docker, this points to the NGINX proxy
-    // export const BACKEND_URL = 'http://localhost:8080'
-   ```
-
-2. Ensure Docker and Docker Compose are installed on your system.
-
-3. Build and start the containers:
+2. Build and start the containers:
    ```
    docker-compose up --build
    ```
    
-4. The application will be available at `http://localhost:4173`.
+3. The application will be available at `http://localhost:5173`.
 
-5. To stop the containers:
+4. To stop the containers:
    ```
    docker-compose down
    ```
