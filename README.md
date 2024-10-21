@@ -90,13 +90,35 @@ These design choices allow the system to handle increased load, recover from fai
 
 ## Getting Started
 
+### Bun
+
+In this project, we're using Bun as it is a fast all-in-one JavaScript toolkit. We used it as our JavaScript runtime, package manager, and testing framework. To install Bun, follow these steps:
+
+1. **For macOS or Linux:**
+   Open a terminal and run the following command:
+   ```
+   curl -fsSL https://bun.sh/install | bash
+   ```
+   This script will download and install Bun on your system.
+
+2. **For Windows:**
+   Bun can be installed on Windows using Windows Subsystem for Linux (WSL). Follow these steps:
+    - Install WSL by following the [official Microsoft guide](https://docs.microsoft.com/en-us/windows/wsl/install).
+    - Once WSL is set up, open your WSL terminal and run the same command as for macOS/Linux:
+      ```
+      curl -fsSL https://bun.sh/install | bash
+      ```
+
+3. **Verify the installation:**
+   After installation, you can verify that Bun is correctly installed by running:
+   ```
+   bun --version
+   ```
+   This should display the version of Bun you've installed.
+
 ### Environment Setup
 
-Before proceeding with either the manual setup or setup using scripts, you need to set up your environment variables:
-
-1. Navigate to the `backend` directory.
-2. Copy the `.env.example` file to a new file named `.env`.
-3. Open the `.env` file and fill in the necessary values for your environment.
+You will need an API key from Etherscan, sign up for one [here](https://etherscan.io/apis). The free tier is generous enough as it offers 100,000 free API calls per day.
 
 ### Local Setup
 
@@ -105,8 +127,10 @@ Before proceeding with either the manual setup or setup using scripts, you need 
    git clone https://github.com/howen02/Tokka-Labs/
    cd tokka-labs
    ```
+   
+2. Navigate to the backend directory, copy the `.env.example` file to a new file named `.env`, and fill in the API key for Etherscan.
 
-2. Install dependencies:
+3. Install dependencies:
    ```
    cd frontend
    npm install --legacy-peer-deps
@@ -115,13 +139,13 @@ Before proceeding with either the manual setup or setup using scripts, you need 
    bun install
    ```
 
-3. Start the development servers:
+4. Start the development servers, each in a separate terminal:
    ```
    cd backend
    bun run dev
 
    cd frontend
-   npm run dev
+   bun run dev
    ```
 
 4. Open your browser and navigate to `http://localhost:5173` to view the application.
