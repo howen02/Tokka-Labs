@@ -63,7 +63,7 @@ The backend stack was chosen out of my personal interest to explore Bun and its 
 The architecture consists of:
 - A client-side React application with React Query for efficient data fetching and caching.
 - Multiple backend instances for scalability and load balancing.
-- Nginx as a reverse proxy to distribute requests among backend instances via Round Robin.
+- Nginx as a reverse proxy to distribute requests among backend instances via a sticky session with their IP hash.
 - SQLite3 databases for each instance for data persistence.
 
 ### Frontend Design
