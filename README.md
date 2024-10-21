@@ -154,18 +154,16 @@ You will need an API key from Etherscan, sign up for one [here](https://ethersca
 
 To run tests:
 
-    ```
     bun test
-    ```
 
 ## Docker Instructions
 
 1. Ensure Docker and Docker Compose are installed on your system.
 
 2. Build and start the containers:
-   ```
-   docker-compose up --build
-   ```
+    ```
+    docker-compose up --build
+    ```
    
 3. The application will be available at `http://localhost:5173`.
 
