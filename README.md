@@ -20,9 +20,11 @@ API Swagger Documentation can be found [here](https://app.swaggerhub.com/apis/WE
 This project is a full-stack application that monitors and displays transaction fees for Uniswap's WETH-USDC pool. It provides real-time data recording and historical batch data retrieval, with a user-friendly interface for querying transactions.
 
 ## Note
-Due to Binance API's rate limit, some transactions may not be available. This is because I chose to fetch the historical ETH price when the transaction occurs to reflect more accurate gas prices.
+Due to Binance API's rate limit, some transactions may use a fallback ETH price of `2722.71`. This is because I chose to fetch the historical ETH price when the transaction occurs to reflect more accurate gas prices.
 
-When batch-fetching past transactions, the Binance API is used to get the ETH-USD spot price for each timestamp. This exceeds the API's rate limit and will result in an IP ban. 
+When batch-fetching past transactions, the Binance API is used to get the ETH-USD spot price for each timestamp. This exceeds the API's rate limit and will result in an IP ban. When this happens, we resort to using the fallback ETH price.
+
+To avoid this issue, it would be better to have a CRON job that fetches the ETH price at regular intervals and stores it in a database. However, this was not done due to time constraints.
 
 ## Tech Stack
 ### Frontend:
@@ -74,7 +76,7 @@ This project has been designed with availability, scalability, and reliability i
 1. Availability:
     - Multiple backend instances ensure that the service remains available even if one instance fails.
     - Nginx acts as a reverse proxy, automatically routing requests to healthy instances.
-    - React Query on the frontend provides caching and stale-while-revalidate functionality, allowing the UI to remain responsive even during temporary backend outages.
+    - React Query on the frontend provides caching, allowing the UI to remain responsive.
 
 2. Scalability:
     - The use of Docker and Docker Compose allows for easy horizontal scaling by adding more backend containers.
