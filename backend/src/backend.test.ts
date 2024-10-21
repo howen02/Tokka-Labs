@@ -1,39 +1,13 @@
-import { describe, it, expect, beforeAll, afterAll } from 'bun:test'
-import { Elysia } from 'elysia'
-import { getRecentTransactions } from './handlers/handleFetchTransactions'
-import { getTransaction } from './handlers/handleFetchTransaction'
+import { describe, it, expect } from 'bun:test'
 
-const TEST_PORT = 3030
+const API_BASE_URL = 'http://localhost:3000'
 
 describe('Uniswap Transaction App', () => {
-	let app: Elysia
-	let server: any
-
-	beforeAll(() => {
-		app = new Elysia()
-			.get('/transactions', ({ query }) =>
-				getRecentTransactions(
-					parseInt(query.page as string) || 1,
-					parseInt(query.pageSize as string) || 50
-				)
-			)
-			.get('/transaction/:hash', getTransaction)
-
-		server = app.listen(TEST_PORT)
-		console.log(`Test server started on http://localhost:${TEST_PORT}`)
-	})
-
-	afterAll(() => {
-		server.stop()
-		console.log('Test server stopped')
-	})
-
 	it('should return recent transactions with pagination', async () => {
 		console.log('\nTesting: GET /transactions')
 		const response = await fetch(
-			`http://localhost:${TEST_PORT}/transactions?page=1&pageSize=50`
+			`${API_BASE_URL}/transactions?page=1&pageSize=50`
 		)
-		console.log(`Expected status: 200, Actual status: ${response.status}`)
 		expect(response.status).toBe(200)
 
 		const body = await response.json()
@@ -44,9 +18,27 @@ describe('Uniswap Transaction App', () => {
 		expect(body.body).toHaveProperty('data')
 		expect(Array.isArray(body.body.data)).toBe(true)
 		expect(body.body.data.length).toBeLessThanOrEqual(50)
-
-		console.log(`Number of transactions returned: ${body.body.data.length}`)
+		expect(body.body.message).toMatch(/\d+ transaction\(s\) found/)
 	})
+
+	it('should return transactions from Oct 1 to Oct 2, 2024', async () => {
+		console.log('\nTesting: GET /transactions/range')
+		const startDate = new Date('2024-10-01T00:00:00Z').getTime()
+		const endDate = new Date('2024-10-02T23:59:59Z').getTime()
+		const response = await fetch(
+			`${API_BASE_URL}/transactions/range?start=${startDate}&end=${endDate}&page=1&pageSize=50`
+		)
+		expect(response.status).toBe(200)
+
+		const body = await response.json()
+
+		expect(body).toHaveProperty('status', 200)
+		expect(body).toHaveProperty('body')
+		expect(body.body).toHaveProperty('message')
+		expect(body.body).toHaveProperty('data')
+		expect(Array.isArray(body.body.data)).toBe(true)
+		expect(body.body.message).toMatch(/\d+ transaction\(s\) found/)
+	}, 10000)
 
 	it('should return a specific transaction', async () => {
 		console.log('\nTesting: GET /transaction/:hash')
@@ -55,32 +47,39 @@ describe('Uniswap Transaction App', () => {
 		console.log(`Testing with transaction hash: ${transactionHash}`)
 
 		const response = await fetch(
-			`http://localhost:${TEST_PORT}/transaction/${transactionHash}`
+			`${API_BASE_URL}/transaction/${transactionHash}`
 		)
-		console.log(`Expected status: 200, Actual status: ${response.status}`)
 		expect(response.status).toBe(200)
 
 		const body = await response.json()
 
+		expect(body).toHaveProperty('status', 200)
 		expect(body).toHaveProperty('body')
 		expect(body.body).toHaveProperty('message')
+		expect(body.body).toHaveProperty('data')
+		expect(body.body.data).toHaveProperty('hash', transactionHash)
+		expect(body.body.data).toHaveProperty('blockNumber')
+		expect(body.body.data).toHaveProperty('gasUsed')
+		expect(body.body.data).toHaveProperty('gasPrice')
+		expect(body.body.data).toHaveProperty('timeStamp')
+		expect(body.body.data).toHaveProperty('ethPrice')
 	})
 
-	it("shouldn't return a transaction", async () => {
-		console.log('\nTesting: GET /transaction/:hash')
-		const transactionHash = 'invalidhash'
-		console.log(`Testing with transaction hash: ${transactionHash}`)
+	it('should return an error for an invalid transaction hash', async () => {
+		console.log('\nTesting: GET /transaction/:hash with invalid hash')
+		const invalidHash = 'invalidhash'
+		console.log(`Testing with transaction hash: ${invalidHash}`)
 
 		const response = await fetch(
-			`http://localhost:${TEST_PORT}/transaction/${transactionHash}`
+			`${API_BASE_URL}/transaction/${invalidHash}`
 		)
-		console.log(`Expected status: 200, Actual status: ${response.status}`)
 		expect(response.status).toBe(200)
 
 		const body = await response.json()
 
-		expect(body).toHaveProperty('status', 500)
+		expect(body).toHaveProperty('status', 404)
 		expect(body).toHaveProperty('body')
 		expect(body.body).toHaveProperty('message')
+		expect(body.body.message).toBe('Transaction not found')
 	})
 })
