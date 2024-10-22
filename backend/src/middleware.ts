@@ -3,7 +3,7 @@ import { pollTransactions } from './services/pollTransactions'
 
 export const pollTransactionsCron = cron({
 	name: 'poll-transactions',
-	pattern: '*/5 * * * * *',
+	pattern: '*/1 * * * * *',
 	run() {
 		pollTransactions().then()
 	}
