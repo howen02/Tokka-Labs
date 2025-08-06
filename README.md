@@ -1,7 +1,5 @@
-# Tokka-Labs
+# Snorkle
 Transaction fee monitor for Uniswap's WETH-USDC pool
-
-API Swagger Documentation can be found [here](https://app.swaggerhub.com/apis/WENHYAP02/TokkaLabs/1.0.0)
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -128,8 +126,8 @@ You will need an API key from [Etherscan](https://etherscan.io/apis) and [Infura
 
 1. Clone the repository:
    ```
-   git clone https://github.com/howen02/Tokka-Labs/
-   cd tokka-labs
+   git clone https://github.com/howenyap/snorkle/
+   cd snorkle
    ```
    
 2. Navigate to the backend directory, copy the `.env.example` file to a new file named `.env`, and fill in the API keys.
